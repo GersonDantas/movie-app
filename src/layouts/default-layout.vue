@@ -26,7 +26,7 @@
     </header>
 
     <main>
-      <slot></slot>
+      <router-view />
     </main>
 
     <footer class="bg-tmdb-primary mt-12 py-8">
