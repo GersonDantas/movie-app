@@ -18,6 +18,14 @@ interface MovieState {
   currentMovie: Movie | null
   loading: boolean
   error: string | null
+  filters: FilterOptions
+  genres: Array<{ id: number, name: string }>
+}
+
+interface FilterOptions {
+  sortBy: 'popularity' | 'rating' | 'date'
+  genre: string
+  year: string
 }
 
 export const useMovieStore = defineStore('movie', {
@@ -27,7 +35,13 @@ export const useMovieStore = defineStore('movie', {
     searchResults: [],
     currentMovie: null,
     loading: false,
-    error: null
+    error: null,
+    filters: {
+      sortBy: 'popularity',
+      genre: '',
+      year: ''
+    } as FilterOptions,
+    genres: [] as Array<{ id: number, name: string }>
   }),
 
   actions: {
@@ -78,6 +92,58 @@ export const useMovieStore = defineStore('movie', {
       } finally {
         this.loading = false
       }
+    },
+
+    async fetchGenres() {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_TMDB_BASE_URL}/genre/movie/list`, {
+          headers: {
+            Authorization: `Bearer ${import.meta.env.VITE_TMDB_API_KEY}`
+          }
+        })
+        this.genres = response.data.genres
+      } catch (error) {
+        this.error = 'Failed to fetch genres'
+      }
+    },
+
+    async fetchMoviesWithFilters() {
+      try {
+        this.loading = true
+        const params = new URLSearchParams()
+        
+        if (this.filters.genre) {
+          params.append('with_genres', this.filters.genre)
+        }
+        
+        if (this.filters.year) {
+          params.append('primary_release_year', this.filters.year)
+        }
+        
+        const sortMap = {
+          popularity: 'popularity.desc',
+          rating: 'vote_average.desc',
+          date: 'primary_release_date.desc'
+        }
+        params.append('sort_by', sortMap[this.filters.sortBy])
+
+        const response = await axios.get(`${import.meta.env.VITE_TMDB_BASE_URL}/discover/movie`, {
+          params,
+          headers: {
+            Authorization: `Bearer ${import.meta.env.VITE_TMDB_API_KEY}`
+          }
+        })
+        this.trending = response.data.results
+      } catch (error) {
+        this.error = 'Failed to fetch movies'
+      } finally {
+        this.loading = false
+      }
+    },
+
+    updateFilters(filters: FilterOptions) {
+      this.filters = filters
+      this.fetchMoviesWithFilters()
     }
   }
 }) 

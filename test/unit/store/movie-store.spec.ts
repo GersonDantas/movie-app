@@ -124,4 +124,19 @@ describe('MovieStore', () => {
     
     expect(store.loading).toBe(false)
   })
+
+  it('updates filters and fetches new results', async () => {
+    const store = useMovieStore()
+    const fetchSpy = vi.spyOn(store, 'fetchMoviesWithFilters')
+    
+    await store.updateFilters({
+      sortBy: 'rating',
+      genre: '28',
+      year: '2024'
+    })
+    
+    expect(store.filters.sortBy).toBe('rating')
+    expect(store.filters.genre).toBe('28')
+    expect(fetchSpy).toHaveBeenCalled()
+  })
 }) 
