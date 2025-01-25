@@ -1,17 +1,15 @@
 const animate = require("tailwindcss-animate")
 
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
   darkMode: ["class"],
   safelist: ["dark"],
   prefix: "",
   
   content: [
-    './pages/**/*.{ts,tsx,vue}',
-    './components/**/*.{ts,tsx,vue}',
-    './app/**/*.{ts,tsx,vue}',
-    './src/**/*.{ts,tsx,vue}',
-	],
+    "./index.html",
+    "./src/**/*.{vue,js,ts,jsx,tsx}",
+  ],
   
   theme: {
     container: {
@@ -56,6 +54,11 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        'tmdb': {
+          'primary': '#032541',
+          'secondary': '#01b4e4',
+          'light': '#f5f5f5',
+        }
       },
       borderRadius: {
         xl: "calc(var(--radius) + 4px)",
