@@ -9,6 +9,14 @@ interface Movie {
   overview: string
   release_date: string
   vote_average: number
+  runtime: number | null
+}
+
+interface Cast {
+  id: number
+  name: string
+  character: string
+  profile_path: string | null
 }
 
 interface MovieState {
@@ -16,12 +24,12 @@ interface MovieState {
   popular: Movie[]
   searchResults: Movie[]
   currentMovie: Movie | null
+  currentMovieCast: Cast[] | null
   loading: boolean
   error: string | null
   filters: FilterOptions
   genres: Array<{ id: number, name: string }>
   activeTab: string
-  timeWindow: 'day' | 'week'
 }
 
 interface FilterOptions {
@@ -36,6 +44,7 @@ export const useMovieStore = defineStore('movie', {
     popular: [],
     searchResults: [],
     currentMovie: null,
+    currentMovieCast: null,
     loading: false,
     error: null,
     filters: {
@@ -44,8 +53,7 @@ export const useMovieStore = defineStore('movie', {
       year: ''
     } as FilterOptions,
     genres: [] as Array<{ id: number, name: string }>,
-    activeTab: 'trending',
-    timeWindow: 'week'
+    activeTab: 'trending'
   }),
 
   actions: {
@@ -71,8 +79,8 @@ export const useMovieStore = defineStore('movie', {
         const response = await axios.get(
           `${import.meta.env.VITE_TMDB_BASE_URL}/movie/popular`,
           {
-            params: {
-              api_key: import.meta.env.VITE_TMDB_API_KEY
+            headers: {
+              Authorization: `Bearer ${import.meta.env.VITE_TMDB_API_KEY}`
             }
           }
         )
