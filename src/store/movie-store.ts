@@ -81,3 +81,5 @@ export const useMovieStore = defineStore('movie', {
     }
   }
 }) 
+
+export type ReturnTypeMovieStore = ReturnType<typeof useMovieStore>
