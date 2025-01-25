@@ -19,5 +19,11 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
+  },
+  test: {
+    include: [
+      'test/unit/**/*.spec.ts',
+      'src/**/*.spec.ts'
+    ]
   }
 })
