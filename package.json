@@ -9,6 +9,8 @@
     "preview": "vite preview",
     "test": "vitest",
     "test:staged": "npm run test -- --changed",
+    "test:run": "npm run test -- --run",
+    "test:coverage": "vitest run --coverage",
     "prepare": "husky"
   },
   "dependencies": {

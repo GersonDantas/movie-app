@@ -9,11 +9,9 @@ export default defineConfig({
     globals: true,
     coverage: {
       provider: 'v8',
-      reporter: ['text', 'json', 'html'],
-    },
-    include: [
-      'test/unit/**/*.spec.ts'
-    ]
+      include: ['src/**/*.{ts,vue}'],
+      exclude: ['src/router/**/*', 'src/**/index.ts']
+    }
   },
   resolve: {
     alias: {
