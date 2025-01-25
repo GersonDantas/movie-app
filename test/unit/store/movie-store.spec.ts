@@ -72,4 +72,56 @@ describe('MovieStore', () => {
     expect(store.loading).toBe(false)
     expect(store.error).toBeNull()
   })
+
+  it('fetches movie details successfully', async () => {
+    const mockResponse = {
+      data: {
+        id: 1,
+        title: 'Test Movie',
+        overview: 'Test overview'
+      }
+    }
+    vi.mocked(axios.get).mockResolvedValueOnce(mockResponse)
+
+    const store = useMovieStore()
+    await store.fetchMovieDetails('1')
+
+    expect(store.currentMovie).toEqual(mockResponse.data)
+    expect(store.loading).toBe(false)
+    expect(store.error).toBeNull()
+  })
+
+  it('handles movie details fetch error', async () => {
+    vi.mocked(axios.get).mockRejectedValueOnce(new Error('API Error'))
+
+    const store = useMovieStore()
+    await store.fetchMovieDetails('1')
+
+    expect(store.currentMovie).toBeNull()
+    expect(store.loading).toBe(false)
+    expect(store.error).toBe('Failed to fetch movie details')
+  })
+
+  it('handles search movies error', async () => {
+    vi.mocked(axios.get).mockRejectedValueOnce(new Error('API Error'))
+
+    const store = useMovieStore()
+    await store.searchMovies('test')
+
+    expect(store.searchResults).toEqual([])
+    expect(store.loading).toBe(false)
+    expect(store.error).toBe('Failed to search movies')
+  })
+
+  it('sets loading state during API calls', async () => {
+    const store = useMovieStore()
+    
+    const promise = store.fetchTrending()
+    expect(store.loading).toBe(true)
+    
+    vi.mocked(axios.get).mockResolvedValueOnce({ data: { results: [] } })
+    await promise
+    
+    expect(store.loading).toBe(false)
+  })
 }) 
