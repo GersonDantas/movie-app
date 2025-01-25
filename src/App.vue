@@ -1,24 +1,53 @@
 <script setup lang="ts">
-import { Button } from '@/components/ui/button'
+import { onMounted } from 'vue'
+import { useMovieStore } from '@/store/movie-store'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+const store = useMovieStore()
+
+onMounted(() => {
+  // Pre-fetch trending movies for home page
+  store.fetchTrending()
+})
 </script>
 
 <template>
-<div>
-    <Button>Click me</Button>
+  <div class="min-h-screen bg-gray-900">
+    <router-view v-slot="{ Component }">
+      <transition name="fade" mode="out-in">
+        <component :is="Component" />
+      </transition>
+    </router-view>
   </div>
 </template>
 
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+<style>
+/* Transition animations */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
+
+/* Global styles */
+body {
+  @apply antialiased text-gray-100;
+}
+
+::-webkit-scrollbar {
+  @apply w-2;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-800;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-tmdb-secondary rounded-full;
 }
 </style>
