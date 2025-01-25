@@ -11,6 +11,9 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
     },
+    include: [
+      'test/unit/**/*.spec.ts'
+    ]
   },
   resolve: {
     alias: {
