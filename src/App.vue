@@ -7,7 +7,6 @@ const router = useRouter()
 const store = useMovieStore()
 
 onMounted(() => {
-  // Pre-fetch trending movies for home page
   store.fetchTrending()
 })
 </script>
