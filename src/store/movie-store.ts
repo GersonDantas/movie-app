@@ -20,6 +20,8 @@ interface MovieState {
   error: string | null
   filters: FilterOptions
   genres: Array<{ id: number, name: string }>
+  activeTab: string
+  timeWindow: 'day' | 'week'
 }
 
 interface FilterOptions {
@@ -41,7 +43,9 @@ export const useMovieStore = defineStore('movie', {
       genre: '',
       year: ''
     } as FilterOptions,
-    genres: [] as Array<{ id: number, name: string }>
+    genres: [] as Array<{ id: number, name: string }>,
+    activeTab: 'trending',
+    timeWindow: 'week'
   }),
 
   actions: {
@@ -56,6 +60,25 @@ export const useMovieStore = defineStore('movie', {
         this.trending = response.data.results
       } catch (error) {
         this.error = 'Failed to fetch trending movies'
+      } finally {
+        this.loading = false
+      }
+    },
+
+    async fetchPopular() {
+      try {
+        this.loading = true
+        const response = await axios.get(
+          `${import.meta.env.VITE_TMDB_BASE_URL}/movie/popular`,
+          {
+            params: {
+              api_key: import.meta.env.VITE_TMDB_API_KEY
+            }
+          }
+        )
+        this.popular = response.data.results
+      } catch (error) {
+        this.error = 'Error fetching popular movies'
       } finally {
         this.loading = false
       }
@@ -144,6 +167,10 @@ export const useMovieStore = defineStore('movie', {
     updateFilters(filters: FilterOptions) {
       this.filters = filters
       this.fetchMoviesWithFilters()
+    },
+
+    setActiveTab(tab: string) {
+      this.activeTab = tab
     }
   }
 }) 
