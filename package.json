@@ -8,7 +8,7 @@
     "build": "vue-tsc -b && vite build",
     "preview": "vite preview",
     "tsc": "npx tsc --noEmit",
-    "test": "vitest",
+    "test": "vitest --passWithNoTests",
     "test:staged": "npm run test -- --changed",
     "test:run": "npm run test -- --run",
     "test:coverage": "vitest run --coverage",
