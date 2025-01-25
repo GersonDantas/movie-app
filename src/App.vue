@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import { useMovieStore } from '@/store/movie-store'
-import { useRouter } from 'vue-router'
 
-const router = useRouter()
 const store = useMovieStore()
 
 onMounted(() => {
