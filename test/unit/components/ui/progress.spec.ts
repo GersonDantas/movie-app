@@ -1,8 +1,17 @@
 import { describe, it, expect } from 'vitest'
-import { mount } from '@vue/test-utils'
+import { mount, VueWrapper } from '@vue/test-utils'
 import { Progress } from '@/components/ui/progress'
 
-const makeSut = (props = {}) => {
+interface ProgressProps {
+  modelValue?: number
+  class?: string
+}
+
+interface SutTypes {
+  wrapper: VueWrapper
+}
+
+const makeSut = (props: Partial<ProgressProps> = {}): SutTypes => {
   const wrapper = mount(Progress, {
     props: {
       modelValue: 50,
