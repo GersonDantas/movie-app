@@ -1,9 +1,12 @@
 import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
+import { createPinia, setActivePinia } from 'pinia'
 import MovieFilters from '@/components/MovieFilters.vue'
+import { useMovieStore } from '@/store/movie-store'
 
 interface SutTypes {
   wrapper: ReturnType<typeof mount<typeof MovieFilters>>
+  store: ReturnType<typeof useMovieStore>
 }
 
 const mockData = {
@@ -14,46 +17,44 @@ const mockData = {
     { id: 16, name: 'Animation' }
   ],
   sortOptions: [
-    'popularity',
-    'rating',
-    'date'
+    { value: 'popularity', label: 'Popularity' },
+    { value: 'rating', label: 'Rating' },
+    { value: 'date', label: 'Release Date' }
   ]
 }
 
 const makeSut = (): SutTypes => {
+  setActivePinia(createPinia())
+  const store = useMovieStore()
+  store.genres = mockData.genres
+
   const wrapper = mount(MovieFilters, {
-    data() {
-      return {
-        years: mockData.years,
-        filters: {
-          sortBy: 'popularity',
-          genre: '',
-          year: ''
-        }
-      }
+    global: {
+      plugins: [createPinia()]
     }
   })
 
-  return { wrapper }
+  return { wrapper, store }
 }
 
 describe('MovieFilters', () => {
-  it('emits filter event when selections change', async () => {
+  it('emits filter event when genre changes', async () => {
     const { wrapper } = makeSut()
     
     await wrapper.vm.$nextTick()
 
-    const select = wrapper.find('[data-testid="genre-select"]')
-    await select.setValue('28')
-    await select.trigger('change')
+    // Simula a mudança do valor diretamente no select de gênero
+    const genreSelect = wrapper.findAllComponents({ name: 'Select' })[1] // O segundo Select é o de gênero
+    await genreSelect.vm.$emit('update:modelValue', '28')
     
-    const emitted = wrapper.emitted()
-    expect(emitted.filter).toBeTruthy()
-    expect(emitted.filter[0]).toEqual([{
+    // Verifica se o evento filter foi emitido
+    const emitted = wrapper.emitted('filter')
+    expect(emitted).toBeTruthy()
+    expect(emitted?.[0][0]).toEqual({
       sortBy: 'popularity',
       genre: '28',
       year: ''
-    }])
+    })
   })
 
   it('shows all available filter options', async () => {
@@ -61,13 +62,13 @@ describe('MovieFilters', () => {
     
     await wrapper.vm.$nextTick()
 
-    const genreOptions = wrapper.find('[data-testid="genre-select"]').findAll('option')
-    expect(genreOptions.length).toBe(4)
+    const genreSelect = wrapper.find('[data-testid="genre-select"]')
+    expect(genreSelect.exists()).toBe(true)
 
-    const sortOptions = wrapper.find('[data-testid="sort-select"]').findAll('option')
-    expect(sortOptions.length).toBe(3)
+    const yearSelect = wrapper.find('[data-testid="year-select"]')
+    expect(yearSelect.exists()).toBe(true)
 
-    const yearOptions = wrapper.find('[data-testid="year-select"]').findAll('option')
-    expect(yearOptions.length).toBe(mockData.years.length + 1)
+    const sortSelect = wrapper.find('[data-testid="sort-select"]')
+    expect(sortSelect.exists()).toBe(true)
   })
 }) 

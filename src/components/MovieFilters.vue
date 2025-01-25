@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { useMovieStore } from '@/store/movie-store'
 
 interface FilterOptions {
   sortBy: 'popularity' | 'rating' | 'date'
@@ -7,6 +9,7 @@ interface FilterOptions {
   year: string
 }
 
+const store = useMovieStore()
 const emit = defineEmits<{
   (e: 'filter', filters: FilterOptions): void
 }>()
@@ -22,44 +25,61 @@ const years = ref(Array.from({ length: 24 }, (_, i) => new Date().getFullYear() 
 const updateFilters = () => {
   emit('filter', filters.value)
 }
+
+const sortOptions = [
+  { value: 'popularity', label: 'Popularity' },
+  { value: 'rating', label: 'Rating' },
+  { value: 'date', label: 'Release Date' }
+]
 </script>
 
 <template>
   <div class="flex gap-4 mb-6">
-    <select 
-      v-model="filters.sortBy"
-      class="bg-gray-800 rounded-lg px-4 py-2"
-      @change="updateFilters"
-      data-testid="sort-select"
-    >
-      <option value="popularity">Popularity</option>
-      <option value="rating">Rating</option>
-      <option value="date">Release Date</option>
-    </select>
+    <Select v-model="filters.sortBy" @update:modelValue="updateFilters">
+      <SelectTrigger data-testid="sort-select" class="w-[180px]">
+        <SelectValue placeholder="Sort by" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem 
+          v-for="option in sortOptions" 
+          :key="option.value" 
+          :value="option.value"
+        >
+          {{ option.label }}
+        </SelectItem>
+      </SelectContent>
+    </Select>
 
-    <select 
-      v-model="filters.genre"
-      class="bg-gray-800 rounded-lg px-4 py-2"
-      @change="updateFilters"
-      data-testid="genre-select"
-    >
-      <option value="">All Genres</option>
-      <option value="28">Action</option>
-      <option value="12">Adventure</option>
-      <option value="16">Animation</option>
-      <!-- Add more genres -->
-    </select>
+    <Select v-model="filters.genre" @update:modelValue="updateFilters">
+      <SelectTrigger data-testid="genre-select" class="w-[180px]">
+        <SelectValue placeholder="Select genre" />
+      </SelectTrigger>
+      <SelectContent data-testid="genre-select-content">
+        <SelectItem value="all">All Genres</SelectItem>
+        <SelectItem 
+          v-for="genre in store.genres" 
+          :key="genre.id" 
+          :value="genre.id.toString()"
+        >
+          {{ genre.name }}
+        </SelectItem>
+      </SelectContent>
+    </Select>
 
-    <select 
-      v-model="filters.year"
-      class="bg-gray-800 rounded-lg px-4 py-2"
-      @change="updateFilters"
-      data-testid="year-select"
-    >
-      <option value="">All Years</option>
-      <option v-for="year in years" :key="year" :value="year">
-        {{ year }}
-      </option>
-    </select>
+    <Select v-model="filters.year" @update:modelValue="updateFilters">
+      <SelectTrigger data-testid="year-select" class="w-[180px]">
+        <SelectValue placeholder="Select year" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value="all">All Years</SelectItem>
+        <SelectItem 
+          v-for="year in years" 
+          :key="year" 
+          :value="year.toString()"
+        >
+          {{ year }}
+        </SelectItem>
+      </SelectContent>
+    </Select>
   </div>
 </template> 
