@@ -1,6 +1,5 @@
 <template>
   <div class="container mx-auto px-4 py-8">
-    <!-- Search Results Header -->
     <div class="mb-8">
       <h1 class="text-3xl font-bold mb-2">Search Results</h1>
       <p class="text-gray-400" v-if="route.query.q">
@@ -8,8 +7,12 @@
       </p>
     </div>
 
-    <!-- Results Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div v-if="store.loading" data-test="loading">Loading...</div>
+    <div v-else-if="store.error" data-test="error">{{ store.error }}</div>
+    <div v-else-if="store.searchResults.length === 0" data-test="no-results">
+      No results found
+    </div>
+    <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       <div v-for="movie in searchResults" :key="movie.id" class="movie-card">
         <router-link :to="`/movie/${movie.id}`" class="block bg-gray-800 rounded-lg overflow-hidden">
           <img 
@@ -26,28 +29,18 @@
         </router-link>
       </div>
     </div>
-
-    <!-- No Results Message -->
-    <div v-if="searchResults.length === 0 && !store.loading" class="text-center py-12">
-      <p class="text-xl text-gray-400">No results found</p>
-    </div>
-
-    <!-- Loading State -->
-    <div v-if="store.loading" class="text-center py-12">
-      <p class="text-xl text-gray-400">Loading...</p>
-    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, watch } from 'vue'
-import { useRoute } from 'vue-router'
-import { useMovieStore } from '@/store/movie-store'
+import { watch } from 'vue'
+import { useRoute, type RouteLocationNormalizedLoaded } from 'vue-router'
+import { useMovieStore, type ReturnTypeMovieStore } from '@/store/movie-store'
 import dayjs from 'dayjs'
 import { computed } from 'vue'
 
-const route = useRoute()
-const store = useMovieStore()
+const route: RouteLocationNormalizedLoaded = useRoute()
+const store: ReturnTypeMovieStore = useMovieStore()
 
 const formatDate = (date: string) => {
   return dayjs(date).format('MMM D, YYYY')
