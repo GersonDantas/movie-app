@@ -1,6 +1,14 @@
 import { defineStore } from 'pinia'
-import axios from 'axios'
-import type { MovieState, FilterOptions } from '@/types/movie'
+import type { MovieState, FilterOptions, Movie, Cast, Genre } from '@/types/movie'
+import type { HttpClient } from '@/data/http-client'
+import { AxiosHttpClient } from '@/infra/axios-http-client'
+
+const httpClient: HttpClient = new AxiosHttpClient()
+const BASE_URL = import.meta.env.VITE_TMDB_BASE_URL
+const AUTH_HEADER = {
+  Authorization: `Bearer ${import.meta.env.VITE_TMDB_API_KEY}`,
+  accept: 'application/json'
+}
 
 export const useMovieStore = defineStore('movie', {
   state: (): MovieState => ({
@@ -24,12 +32,12 @@ export const useMovieStore = defineStore('movie', {
     async fetchTrending() {
       try {
         this.loading = true
-        const response = await axios.get(`${import.meta.env.VITE_TMDB_BASE_URL}/trending/movie/week`, {
-          headers: {
-            Authorization: `Bearer ${import.meta.env.VITE_TMDB_API_KEY}`
-          }
+        const response = await httpClient.request<{ results: Movie[] }>({
+          url: `${BASE_URL}/trending/movie/week`,
+          method: 'get',
+          headers: AUTH_HEADER
         })
-        this.trending = response.data.results
+        this.trending = response.body.results
       } catch (error) {
         this.error = 'Failed to fetch trending movies'
       } finally {
@@ -40,16 +48,12 @@ export const useMovieStore = defineStore('movie', {
     async fetchPopular() {
       try {
         this.loading = true
-        const response = await axios.get(
-          `${import.meta.env.VITE_TMDB_BASE_URL}/movie/popular`,
-          {
-            headers: {
-              accept: 'application/json',
-              Authorization: `Bearer ${import.meta.env.VITE_TMDB_API_KEY}`
-            }
-          }
-        )
-        this.popular = response.data.results
+        const response = await httpClient.request<{ results: Movie[] }>({
+          url: `${BASE_URL}/movie/popular`,
+          method: 'get',
+          headers: AUTH_HEADER
+        })
+        this.popular = response.body.results
       } catch (error) {
         this.error = 'Error fetching popular movies'
       } finally {
@@ -60,13 +64,13 @@ export const useMovieStore = defineStore('movie', {
     async searchMovies(query: string) {
       try {
         this.loading = true
-        const response = await axios.get(`${import.meta.env.VITE_TMDB_BASE_URL}/search/movie`, {
-          params: { query },
-          headers: {
-            Authorization: `Bearer ${import.meta.env.VITE_TMDB_API_KEY}`
-          }
+        const response = await httpClient.request<{ results: Movie[] }>({
+          url: `${BASE_URL}/search/movie`,
+          method: 'get',
+          headers: AUTH_HEADER,
+          params: { query }
         })
-        this.searchResults = response.data.results
+        this.searchResults = response.body.results
       } catch (error) {
         this.error = 'Failed to search movies'
       } finally {
@@ -77,12 +81,21 @@ export const useMovieStore = defineStore('movie', {
     async fetchMovieDetails(id: string) {
       try {
         this.loading = true
-        const response = await axios.get(`${import.meta.env.VITE_TMDB_BASE_URL}/movie/${id}`, {
-          headers: {
-            Authorization: `Bearer ${import.meta.env.VITE_TMDB_API_KEY}`
-          }
-        })
-        this.currentMovie = response.data
+        const [movieResponse, creditsResponse] = await Promise.all([
+          httpClient.request<Movie>({
+            url: `${BASE_URL}/movie/${id}`,
+            method: 'get',
+            headers: AUTH_HEADER
+          }),
+          httpClient.request<{ cast: Cast[] }>({
+            url: `${BASE_URL}/movie/${id}/credits`,
+            method: 'get',
+            headers: AUTH_HEADER
+          })
+        ])
+        
+        this.currentMovie = movieResponse.body
+        this.currentMovieCast = creditsResponse.body.cast
       } catch (error) {
         this.error = 'Failed to fetch movie details'
       } finally {
@@ -92,12 +105,12 @@ export const useMovieStore = defineStore('movie', {
 
     async fetchGenres() {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_TMDB_BASE_URL}/genre/movie/list`, {
-          headers: {
-            Authorization: `Bearer ${import.meta.env.VITE_TMDB_API_KEY}`
-          }
+        const response = await httpClient.request<{ genres: Genre[] }>({
+          url: `${BASE_URL}/genre/movie/list`,
+          method: 'get',
+          headers: AUTH_HEADER
         })
-        this.genres = response.data.genres
+        this.genres = response.body.genres
       } catch (error) {
         this.error = 'Failed to fetch genres'
       }
@@ -106,14 +119,14 @@ export const useMovieStore = defineStore('movie', {
     async fetchMoviesWithFilters() {
       try {
         this.loading = true
-        const params = new URLSearchParams()
+        const params: Record<string, string> = {}
         
         if (this.filters.genre) {
-          params.append('with_genres', this.filters.genre)
+          params.with_genres = this.filters.genre
         }
         
         if (this.filters.year) {
-          params.append('primary_release_year', this.filters.year)
+          params.primary_release_year = this.filters.year
         }
         
         const sortMap = {
@@ -121,15 +134,15 @@ export const useMovieStore = defineStore('movie', {
           rating: 'vote_average.desc',
           date: 'primary_release_date.desc'
         }
-        params.append('sort_by', sortMap[this.filters.sortBy])
+        params.sort_by = sortMap[this.filters.sortBy]
 
-        const response = await axios.get(`${import.meta.env.VITE_TMDB_BASE_URL}/discover/movie`, {
-          params,
-          headers: {
-            Authorization: `Bearer ${import.meta.env.VITE_TMDB_API_KEY}`
-          }
+        const response = await httpClient.request<{ results: Movie[] }>({
+          url: `${BASE_URL}/discover/movie`,
+          method: 'get',
+          headers: AUTH_HEADER,
+          params
         })
-        this.trending = response.data.results
+        this.trending = response.body.results
       } catch (error) {
         this.error = 'Failed to fetch movies'
       } finally {
