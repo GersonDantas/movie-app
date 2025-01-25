@@ -13,8 +13,24 @@ const mockMovie = {
   poster_path: '/test.jpg',
   backdrop_path: '/test-backdrop.jpg',
   release_date: '2024-01-01',
-  vote_average: 7.5
+  vote_average: 7.5,
+  runtime: 120
 }
+
+const mockCast = [
+  {
+    id: 1,
+    name: 'Actor 1',
+    character: 'Character 1',
+    profile_path: '/actor1.jpg'
+  },
+  {
+    id: 2,
+    name: 'Actor 2',
+    character: 'Character 2',
+    profile_path: '/actor2.jpg'
+  }
+]
 
 const router = createRouter({
   history: createWebHistory(),
@@ -47,6 +63,7 @@ describe('Movie Component', () => {
     
     Object.assign(store, {
       currentMovie: mockMovie,
+      currentMovieCast: mockCast,
       loading: false,
       error: null,
       ...options
@@ -62,7 +79,11 @@ describe('Movie Component', () => {
       global: {
         plugins: [router],
         stubs: {
-          RouterLink: true
+          RouterLink: true,
+          Progress: {
+            template: '<div data-testid="movie-score">{{ modelValue }}%</div>',
+            props: ['modelValue']
+          }
         }
       }
     })
@@ -84,23 +105,29 @@ describe('Movie Component', () => {
   it('displays movie details correctly', async () => {
     const { wrapper } = await makeSut()
     
-    expect(wrapper.find('[data-test="movie-title"]').text()).toBe(mockMovie.title)
-    expect(wrapper.find('[data-test="movie-overview"]').text()).toBe(mockMovie.overview)
-    expect(wrapper.find('[data-test="movie-score"]').text()).toBe('75%')
+    expect(wrapper.find('[data-testid="movie-title"]').text()).toBe(mockMovie.title)
+    expect(wrapper.find('[data-testid="movie-overview"]').text()).toBe(mockMovie.overview)
+    expect(wrapper.find('[data-testid="movie-score"]').text()).toBe('75%')
+    expect(wrapper.find('[data-testid="release-date"]').text()).toBe('Jan 1, 2024')
+    expect(wrapper.find('[data-testid="runtime"]').text()).toBe('2h 0m')
   })
 
   it('shows loading state', async () => {
     const { wrapper } = await makeSut({ loading: true })
-    expect(wrapper.find('[data-test="loading"]').exists()).toBe(true)
+    expect(wrapper.find('[data-testid="loading"]').exists()).toBe(true)
   })
 
   it('shows error message when fetch fails', async () => {
     const { wrapper } = await makeSut({ error: 'Failed to fetch movie details' })
-    expect(wrapper.find('[data-test="error"]').text()).toBe('Failed to fetch movie details')
+    expect(wrapper.find('[data-testid="error"]').text()).toBe('Failed to fetch movie details')
   })
 
-  it('formats release date correctly', async () => {
+  it('displays cast members', async () => {
     const { wrapper } = await makeSut()
-    expect(wrapper.find('[data-test="release-date"]').text()).toBe('Jan 1, 2024')
+    const castCards = wrapper.findAll('[data-testid="cast-card"]')
+    
+    expect(castCards.length).toBe(mockCast.length)
+    expect(castCards[0].text()).toContain(mockCast[0].name)
+    expect(castCards[0].text()).toContain(mockCast[0].character)
   })
 }) 

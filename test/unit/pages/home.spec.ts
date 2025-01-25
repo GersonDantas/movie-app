@@ -93,6 +93,10 @@ const makeSut = () => {
     }
   })
   const store = useMovieStore()
+  
+  vi.spyOn(store, 'fetchPopular')
+  vi.spyOn(store, 'fetchTrending')
+  
   return { wrapper, store }
 }
 
