@@ -1,42 +1,6 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
-
-interface Movie {
-  id: number
-  title: string
-  poster_path: string
-  backdrop_path: string
-  overview: string
-  release_date: string
-  vote_average: number
-  runtime: number | null
-}
-
-interface Cast {
-  id: number
-  name: string
-  character: string
-  profile_path: string | null
-}
-
-interface MovieState {
-  trending: Movie[]
-  popular: Movie[]
-  searchResults: Movie[]
-  currentMovie: Movie | null
-  currentMovieCast: Cast[] | null
-  loading: boolean
-  error: string | null
-  filters: FilterOptions
-  genres: Array<{ id: number, name: string }>
-  activeTab: string
-}
-
-interface FilterOptions {
-  sortBy: 'popularity' | 'rating' | 'date'
-  genre: string
-  year: string
-}
+import type { MovieState, FilterOptions } from '@/types/movie'
 
 export const useMovieStore = defineStore('movie', {
   state: (): MovieState => ({
@@ -52,7 +16,7 @@ export const useMovieStore = defineStore('movie', {
       genre: '',
       year: ''
     } as FilterOptions,
-    genres: [] as Array<{ id: number, name: string }>,
+    genres: [],
     activeTab: 'trending'
   }),
 
@@ -80,6 +44,7 @@ export const useMovieStore = defineStore('movie', {
           `${import.meta.env.VITE_TMDB_BASE_URL}/movie/popular`,
           {
             headers: {
+              accept: 'application/json',
               Authorization: `Bearer ${import.meta.env.VITE_TMDB_API_KEY}`
             }
           }
@@ -181,6 +146,6 @@ export const useMovieStore = defineStore('movie', {
       this.activeTab = tab
     }
   }
-}) 
+})
 
 export type ReturnTypeMovieStore = ReturnType<typeof useMovieStore>

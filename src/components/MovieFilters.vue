@@ -2,12 +2,7 @@
 import { ref } from 'vue'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useMovieStore } from '@/store/movie-store'
-
-interface FilterOptions {
-  sortBy: 'popularity' | 'rating' | 'date'
-  genre: string
-  year: string
-}
+import type { FilterOptions } from '@/types/movie'
 
 const store = useMovieStore()
 const emit = defineEmits<{

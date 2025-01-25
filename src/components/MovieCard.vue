@@ -2,14 +2,7 @@
 import { computed } from 'vue'
 import dayjs from 'dayjs'
 import { Progress } from '@/components/ui/progress'
-
-interface Movie {
-  id: number
-  title: string
-  poster_path: string
-  release_date: string
-  vote_average: number
-}
+import type { Movie } from '@/types/movie'
 
 const props = defineProps<{
   movie: Movie
