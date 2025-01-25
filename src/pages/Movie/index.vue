@@ -48,6 +48,7 @@
 import { onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useMovieStore } from '@/store/movie-store'
+import { computed } from 'vue'
 import dayjs from 'dayjs'
 
 const route = useRoute()

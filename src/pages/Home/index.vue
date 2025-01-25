@@ -56,6 +56,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useMovieStore } from '@/store/movie-store'
+import { computed } from 'vue'
 import dayjs from 'dayjs'
 
 const store = useMovieStore()
