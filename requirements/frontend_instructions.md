@@ -9,6 +9,7 @@ This guide outlines the steps to create a Vue 3 project using TypeScript, Vite, 
 - Implement lazy loading of images to improve performance.
 - Write unit tests with Jest and end-to-end tests with Playwright.
 - Style the application using Tailwind CSS.
+- build step by step to monitor the process
 
 # Relevant docs
 - TMDb API: [https://www.themoviedb.org/documentation/api](https://www.themoviedb.org/documentation/api)
@@ -23,7 +24,7 @@ const options = {
   method: 'GET',
   headers: {
     accept: 'application/json',
-    Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzMWM3MWMxMDRjOWYwNDYwZmIyZjc5ZDkzZGZmNGFhZSIsIm5iZiI6MTczNzgwOTQ2NS40NjUsInN1YiI6IjY3OTRkZTM5YzdiMDFiNzJjNzIzYTY5NiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.f9TcmXEQz09YmnRYyAWTjayLxd8sbILTka6sl2e2iA0'
+    Authorization: `Bearer ${import.meta.env.VITE_TMDB_API_KEY}`
   }
 };
 
@@ -39,9 +40,9 @@ fetch('https://api.themoviedb.org/3/authentication', options)
      import axios from 'axios';
 
      const apiClient = axios.create({
-       baseURL: 'https://api.themoviedb.org/3',
+       baseURL: import.meta.env.VITE_TMDB_BASE_URL,
        params: {
-         api_key: process.env.VITE_TMDB_API_KEY,
+         api_key: import.meta.env.VITE_TMDB_API_KEY,
        },
      });
 
