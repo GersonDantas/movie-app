@@ -114,11 +114,11 @@ export const useMovieStore = defineStore('movie', {
         const params = new URLSearchParams()
 
         if (this.filters.genre) {
-          params.append('with_genres', this.filters.genre)
+          params.append('with_genres', this.filters.genre === 'all' ? '' : this.filters.genre)
         }
 
         if (this.filters.year) {
-          params.append('primary_release_year', this.filters.year)
+          params.append('primary_release_year', this.filters.year === 'all' ? '' : this.filters.year)
         }
 
         const sortMap = {
