@@ -30,6 +30,8 @@ export class AxiosHttpClient implements HttpClient {
       if (error.response.status === 404) {
         throw new NotFoundError()
       }
+
+      throw error
     }
   }
 }

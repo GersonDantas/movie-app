@@ -89,7 +89,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useMovieStore } from '@/store/movie-store'
 import { Progress } from '@/components/ui/progress'
