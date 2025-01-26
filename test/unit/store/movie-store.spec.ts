@@ -1,142 +1,145 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { setActivePinia, createPinia } from 'pinia'
-import { useMovieStore, type ReturnTypeMovieStore } from '@/store/movie-store'
-import axios from 'axios'
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { setActivePinia, createPinia } from 'pinia';
+import { useMovieStore, type ReturnTypeMovieStore } from '@/store/movie-store';
+import axios from 'axios';
+import type { HttpClient } from '@/types/http-client';
 
-vi.mock('axios')
+vi.mock('axios');
 
 type SutTypes = {
-  mockResponse: unknown
-  method?: 'fetchTrending' | 'searchMovies'
-}
+  mockResponse: unknown;
+  method?: 'fetchTrending' | 'searchMovies';
+};
 
 const makeSut = async ({ mockResponse, method = 'fetchTrending' }: SutTypes): Promise<ReturnTypeMovieStore> => {
-  vi.mocked(axios.get).mockResolvedValueOnce(mockResponse)
+  vi.mocked(axios.request).mockResolvedValueOnce(mockResponse);
 
-  const store = useMovieStore()
+  const store = useMovieStore();
   if (method === 'searchMovies') {
-    await store[method]('test')
+    await store[method]('test');
   } else {
-    await store[method]()
+    await store[method]();
   }
 
-  return store 
-}
+  return store;
+};
 
 describe('MovieStore', () => {
   beforeEach(() => {
-    setActivePinia(createPinia())
-    vi.clearAllMocks()
-  })
+    setActivePinia(createPinia());
+    vi.clearAllMocks();
+  });
 
   it('has initial state', () => {
-    const store = useMovieStore()
-    expect(store.trending).toEqual([])
-    expect(store.popular).toEqual([])
-    expect(store.searchResults).toEqual([])
-    expect(store.currentMovie).toBeNull()
-    expect(store.loading).toBe(false)
-    expect(store.error).toBeNull()
-  })
+    const store = useMovieStore();
+    expect(store.trending).toEqual([]);
+    expect(store.popular).toEqual([]);
+    expect(store.searchResults).toEqual([]);
+    expect(store.currentMovie).toBeNull();
+    expect(store.loading).toBe(false);
+    expect(store.error).toBeNull();
+  });
 
   it('fetches trending movies successfully', async () => {
     const mockResponse = {
       data: {
         results: [{ id: 1, title: 'Test Movie' }]
       }
-    }
-    const store = await makeSut({ mockResponse })
+    };
+    const store = await makeSut({ mockResponse });
 
-    expect(store.trending).toEqual(mockResponse.data.results)
-    expect(store.loading).toBe(false)
-    expect(store.error).toBeNull()
-  })
+    expect(store.trending).toEqual(mockResponse.data.results);
+    expect(store.loading).toBe(false);
+    expect(store.error).toBeNull();
+  });
 
   it('handles fetch trending error', async () => {
-    const store = await makeSut({ mockResponse: new Error('API Error') })
-    
-    expect(store.trending).toEqual([])
-    expect(store.loading).toBe(false)
-    expect(store.error).toBe('Failed to fetch trending movies')
-  })
+    const store = await makeSut({ mockResponse: new Error('API Error') });
+
+    expect(store.trending).toEqual([]);
+    expect(store.loading).toBe(false);
+    expect(store.error).toBe('Failed to fetch trending movies');
+  });
 
   it('searches movies successfully', async () => {
     const mockResponse = {
       data: {
         results: [{ id: 2, title: 'Search Result' }]
       }
-    }
-    const store = await makeSut({ mockResponse, method: 'searchMovies' })
+    };
+    const store = await makeSut({ mockResponse, method: 'searchMovies' });
 
-    expect(store.searchResults).toEqual(mockResponse.data.results)
-    expect(store.loading).toBe(false)
-    expect(store.error).toBeNull()
-  })
+    expect(store.searchResults).toEqual(mockResponse.data.results);
+    expect(store.loading).toBe(false);
+    expect(store.error).toBeNull();
+  });
 
   it('fetches movie details successfully', async () => {
     const mockResponse = {
       data: {
-        id: 1,
-        title: 'Test Movie',
-        overview: 'Test overview'
+        results: [{
+          id: 1,
+          title: 'Test Movie',
+          overview: 'Test overview'
+        }]
       }
-    }
-    vi.mocked(axios.get).mockResolvedValueOnce(mockResponse)
+    };
+    vi.mocked(axios.request).mockResolvedValueOnce(mockResponse);
 
-    const store = useMovieStore()
-    await store.fetchMovieDetails('1')
+    const store = useMovieStore();
+    await store.fetchMovieDetails('1');
 
-    expect(store.currentMovie).toEqual(mockResponse.data)
-    expect(store.loading).toBe(false)
-    expect(store.error).toBeNull()
-  })
+    expect(store.currentMovie).toEqual(mockResponse.data);
+    expect(store.loading).toBe(false);
+    expect(store.error).toBeNull();
+  });
 
   it('handles movie details fetch error', async () => {
-    vi.mocked(axios.get).mockRejectedValueOnce(new Error('API Error'))
+    vi.mocked(axios.get).mockRejectedValueOnce(new Error('API Error'));
 
-    const store = useMovieStore()
-    await store.fetchMovieDetails('1')
+    const store = useMovieStore();
+    await store.fetchMovieDetails('1');
 
-    expect(store.currentMovie).toBeNull()
-    expect(store.loading).toBe(false)
-    expect(store.error).toBe('Failed to fetch movie details')
-  })
+    expect(store.currentMovie).toBeNull();
+    expect(store.loading).toBe(false);
+    expect(store.error).toBe('Failed to fetch movie details');
+  });
 
   it('handles search movies error', async () => {
-    vi.mocked(axios.get).mockRejectedValueOnce(new Error('API Error'))
+    vi.mocked(axios.get).mockRejectedValueOnce(new Error('API Error'));
 
-    const store = useMovieStore()
-    await store.searchMovies('test')
+    const store = useMovieStore();
+    await store.searchMovies('test');
 
-    expect(store.searchResults).toEqual([])
-    expect(store.loading).toBe(false)
-    expect(store.error).toBe('Failed to search movies')
-  })
+    expect(store.searchResults).toEqual([]);
+    expect(store.loading).toBe(false);
+    expect(store.error).toBe('Failed to search movies');
+  });
 
   it('sets loading state during API calls', async () => {
-    const store = useMovieStore()
-    
-    const promise = store.fetchTrending()
-    expect(store.loading).toBe(true)
-    
-    vi.mocked(axios.get).mockResolvedValueOnce({ data: { results: [] } })
-    await promise
-    
-    expect(store.loading).toBe(false)
-  })
+    const store = useMovieStore();
+
+    const promise = store.fetchTrending();
+    expect(store.loading).toBe(true);
+
+    vi.mocked(axios.get).mockResolvedValueOnce({ data: { results: [] } });
+    await promise;
+
+    expect(store.loading).toBe(false);
+  });
 
   it('updates filters and fetches new results', async () => {
-    const store = useMovieStore()
-    const fetchSpy = vi.spyOn(store, 'fetchMoviesWithFilters')
-    
+    const store = useMovieStore();
+    const fetchSpy = vi.spyOn(store, 'fetchMoviesWithFilters');
+
     await store.updateFilters({
       sortBy: 'rating',
       genre: '28',
       year: '2024'
-    })
-    
-    expect(store.filters.sortBy).toBe('rating')
-    expect(store.filters.genre).toBe('28')
-    expect(fetchSpy).toHaveBeenCalled()
-  })
-}) 
+    });
+
+    expect(store.filters.sortBy).toBe('rating');
+    expect(store.filters.genre).toBe('28');
+    expect(fetchSpy).toHaveBeenCalled();
+  });
+});

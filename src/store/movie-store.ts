@@ -37,6 +37,7 @@ export const useMovieStore = defineStore('movie', {
           method: 'get',
           headers: AUTH_HEADER
         })
+        console.log(response.body)
         this.trending = response.body.results
       } catch (error) {
         this.error = 'Failed to fetch trending movies'
@@ -81,21 +82,13 @@ export const useMovieStore = defineStore('movie', {
     async fetchMovieDetails(id: string) {
       try {
         this.loading = true
-        const [movieResponse, creditsResponse] = await Promise.all([
-          httpClient.request<Movie>({
+        const movieResponse = await httpClient.request<Movie>({
             url: `${BASE_URL}/movie/${id}`,
             method: 'get',
             headers: AUTH_HEADER
-          }),
-          httpClient.request<{ cast: Cast[] }>({
-            url: `${BASE_URL}/movie/${id}/credits`,
-            method: 'get',
-            headers: AUTH_HEADER
           })
-        ])
         
         this.currentMovie = movieResponse.body
-        this.currentMovieCast = creditsResponse.body.cast
       } catch (error) {
         this.error = 'Failed to fetch movie details'
       } finally {

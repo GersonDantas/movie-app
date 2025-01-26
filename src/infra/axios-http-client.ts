@@ -1,4 +1,4 @@
-import { type HttpClient, type HttpResponse, type HttpRequest } from '@/data/http-client'
+import { type HttpClient, type HttpResponse, type HttpRequest } from '@/types/http-client'
 
 import axios, { type AxiosResponse } from 'axios'
 
