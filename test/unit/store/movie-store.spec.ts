@@ -2,7 +2,6 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { setActivePinia, createPinia } from 'pinia';
 import { useMovieStore, type ReturnTypeMovieStore } from '@/store/movie-store';
 import axios from 'axios';
-import type { HttpClient } from '@/types/http-client';
 
 vi.mock('axios');
 
