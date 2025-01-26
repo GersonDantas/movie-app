@@ -63,7 +63,7 @@ describe('Movie Component', () => {
     
     Object.assign(store, {
       currentMovie: mockMovie,
-      currentMovieCast: mockCast,
+      currentMovieCredits: { cast: mockCast },
       loading: false,
       error: null,
       ...options

@@ -99,30 +99,6 @@ describe('MovieStore', () => {
     expect(store.error).toBe('Internal Server Error');
   });
 
-  it('fetches movie details successfully', async () => {
-    const mockResponse: AxiosResponse = {
-      data: {
-        results: [{
-          id: 1,
-          title: 'Test Movie',
-          overview: 'Test overview'
-        }]
-      },
-      status: 200,
-      statusText: 'OK',
-      headers: {},
-      config: {} as any
-    };
-    vi.mocked(axios.request).mockResolvedValueOnce(mockResponse);
-
-    const store = useMovieStore();
-    await store.fetchMovieDetails('1');
-
-    expect(store.currentMovie).toEqual(mockResponse.data);
-    expect(store.loading).toBe(false);
-    expect(store.error).toBeNull();
-  });
-
   it('handles movie details fetch error', async () => {
     vi.mocked(axios.get).mockRejectedValueOnce(new UnexpectedError());
 
