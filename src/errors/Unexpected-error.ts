@@ -1,6 +1,6 @@
 export class UnexpectedError extends Error {
-  constructor () {
-    super('Failed to fetch trending movies')
+  constructor() {
+    super('Internal Server Error')
     this.name = 'UnexpectedError'
   }
 }

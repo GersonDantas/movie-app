@@ -3,7 +3,7 @@ import { AccessDeniedError, NotFoundError, UnexpectedError } from '@/errors'
 import axios, { type AxiosResponse } from 'axios'
 
 export class AxiosHttpClient implements HttpClient {
-  async request (data: HttpRequest): Promise<HttpResponse> {
+  async request(data: HttpRequest): Promise<HttpResponse> {
     let axiosResponse: AxiosResponse
     try {
       axiosResponse = await axios.request({
@@ -11,25 +11,24 @@ export class AxiosHttpClient implements HttpClient {
         method: data.method,
         data: data.body,
         headers: data.headers,
-        params: data.params
+        params: data.params,
       })
 
       return {
         statusCode: axiosResponse.status,
-        body: axiosResponse.data
+        body: axiosResponse.data,
       }
     } catch (error: any) {
-      if (!error.response) {
+      if (!error.response || error.response.status === 500) {
         throw new UnexpectedError()
       }
 
-      switch (error.response.status) {
-        case 401:
-          throw new AccessDeniedError()
-        case 404:
-          throw new NotFoundError()
-        default:
-          throw new UnexpectedError()
+      if (error.response.status === 401) {
+        throw new AccessDeniedError()
+      }
+
+      if (error.response.status === 404) {
+        throw new NotFoundError()
       }
     }
   }

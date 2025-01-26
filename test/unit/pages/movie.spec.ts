@@ -118,8 +118,8 @@ describe('Movie Component', () => {
   })
 
   it('shows error message when fetch fails', async () => {
-    const { wrapper } = await makeSut({ error: 'Failed to fetch movie details' })
-    expect(wrapper.find('[data-testid="error"]').text()).toBe('Failed to fetch movie details')
+    const { wrapper } = await makeSut({ error: 'Internal Server Error' })
+    expect(wrapper.find('[data-testid="error"]').text()).toBe('Internal Server Error')
   })
 
   it('displays cast members', async () => {

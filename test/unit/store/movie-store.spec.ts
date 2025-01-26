@@ -1,17 +1,21 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { setActivePinia, createPinia } from 'pinia';
 import { useMovieStore, type ReturnTypeMovieStore } from '@/store/movie-store';
-import axios from 'axios';
+import axios, { type AxiosResponse } from 'axios';
+import { UnexpectedError } from '@/errors';
 
 vi.mock('axios');
 
 type SutTypes = {
-  mockResponse: unknown;
+  mockResponse: AxiosResponse;
   method?: 'fetchTrending' | 'searchMovies';
 };
 
 const makeSut = async ({ mockResponse, method = 'fetchTrending' }: SutTypes): Promise<ReturnTypeMovieStore> => {
-  vi.mocked(axios.request).mockResolvedValueOnce(mockResponse);
+  vi.mocked(axios.request).mockResolvedValueOnce({
+    status: 200,
+    data: mockResponse.data
+  });
 
   const store = useMovieStore();
   if (method === 'searchMovies') {
@@ -40,10 +44,14 @@ describe('MovieStore', () => {
   });
 
   it('fetches trending movies successfully', async () => {
-    const mockResponse = {
+    const mockResponse: AxiosResponse = {
       data: {
         results: [{ id: 1, title: 'Test Movie' }]
-      }
+      },
+      status: 200,
+      statusText: 'OK',
+      headers: {},
+      config: {} as any
     };
     const store = await makeSut({ mockResponse });
 
@@ -53,18 +61,25 @@ describe('MovieStore', () => {
   });
 
   it('handles fetch trending error', async () => {
-    const store = await makeSut({ mockResponse: new Error('API Error') });
+    vi.mocked(axios.request).mockRejectedValueOnce(new UnexpectedError());
+    
+    const store = useMovieStore();
+    await store.fetchTrending();
 
     expect(store.trending).toEqual([]);
     expect(store.loading).toBe(false);
-    expect(store.error).toBe('Failed to fetch trending movies');
+    expect(store.error).toBe('Internal Server Error');
   });
 
   it('searches movies successfully', async () => {
-    const mockResponse = {
+    const mockResponse: AxiosResponse = {
       data: {
         results: [{ id: 2, title: 'Search Result' }]
-      }
+      },
+      status: 200,
+      statusText: 'OK',
+      headers: {},
+      config: {} as any
     };
     const store = await makeSut({ mockResponse, method: 'searchMovies' });
 
@@ -73,15 +88,30 @@ describe('MovieStore', () => {
     expect(store.error).toBeNull();
   });
 
+  it('handles search movies error', async () => {
+    vi.mocked(axios.request).mockRejectedValueOnce(new UnexpectedError());
+    
+    const store = useMovieStore();
+    await store.searchMovies('test');
+
+    expect(store.searchResults).toEqual([]);
+    expect(store.loading).toBe(false);
+    expect(store.error).toBe('Internal Server Error');
+  });
+
   it('fetches movie details successfully', async () => {
-    const mockResponse = {
+    const mockResponse: AxiosResponse = {
       data: {
         results: [{
           id: 1,
           title: 'Test Movie',
           overview: 'Test overview'
         }]
-      }
+      },
+      status: 200,
+      statusText: 'OK',
+      headers: {},
+      config: {} as any
     };
     vi.mocked(axios.request).mockResolvedValueOnce(mockResponse);
 
@@ -94,25 +124,14 @@ describe('MovieStore', () => {
   });
 
   it('handles movie details fetch error', async () => {
-    vi.mocked(axios.get).mockRejectedValueOnce(new Error('API Error'));
+    vi.mocked(axios.get).mockRejectedValueOnce(new UnexpectedError());
 
     const store = useMovieStore();
     await store.fetchMovieDetails('1');
 
     expect(store.currentMovie).toBeNull();
     expect(store.loading).toBe(false);
-    expect(store.error).toBe('Failed to fetch movie details');
-  });
-
-  it('handles search movies error', async () => {
-    vi.mocked(axios.get).mockRejectedValueOnce(new Error('API Error'));
-
-    const store = useMovieStore();
-    await store.searchMovies('test');
-
-    expect(store.searchResults).toEqual([]);
-    expect(store.loading).toBe(false);
-    expect(store.error).toBe('Failed to search movies');
+    expect(store.error).toBe('Internal Server Error');
   });
 
   it('sets loading state during API calls', async () => {

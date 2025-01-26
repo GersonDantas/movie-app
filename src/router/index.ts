@@ -12,21 +12,21 @@ const router = createRouter({
         {
           path: '/',
           name: 'home',
-          component: Home
+          component: Home,
         },
         {
           path: '/search',
           name: 'search',
-          component: Search
+          component: Search,
         },
         {
           path: '/movie/:id',
           name: 'movie-details',
-          component: Movie
-        }
-      ]
-    }
-  ]
+          component: Movie,
+        },
+      ],
+    },
+  ],
 })
 
-export default router 
+export default router

@@ -7,7 +7,7 @@ const httpClient: HttpClient = new AxiosHttpClient()
 const BASE_URL = import.meta.env.VITE_TMDB_BASE_URL
 const AUTH_HEADER = {
   Authorization: `Bearer ${import.meta.env.VITE_TMDB_API_KEY}`,
-  accept: 'application/json'
+  accept: 'application/json',
 }
 
 export const useMovieStore = defineStore('movie', {
@@ -22,10 +22,10 @@ export const useMovieStore = defineStore('movie', {
     filters: {
       sortBy: 'popularity',
       genre: '',
-      year: ''
+      year: '',
     } as FilterOptions,
     genres: [],
-    activeTab: 'trending'
+    activeTab: 'trending',
   }),
 
   actions: {
@@ -35,11 +35,11 @@ export const useMovieStore = defineStore('movie', {
         const response = await httpClient.request<{ results: Movie[] }>({
           url: `${BASE_URL}/trending/movie/week`,
           method: 'get',
-          headers: AUTH_HEADER
+          headers: AUTH_HEADER,
         })
         this.trending = response.body.results
       } catch (error) {
-        this.error = 'Failed to fetch trending movies'
+        this.error = (error as Error).message
       } finally {
         this.loading = false
       }
@@ -51,11 +51,11 @@ export const useMovieStore = defineStore('movie', {
         const response = await httpClient.request<{ results: Movie[] }>({
           url: `${BASE_URL}/movie/popular`,
           method: 'get',
-          headers: AUTH_HEADER
+          headers: AUTH_HEADER,
         })
         this.popular = response.body.results
       } catch (error) {
-        this.error = 'Error fetching popular movies'
+        this.error = (error as Error).message
       } finally {
         this.loading = false
       }
@@ -67,11 +67,12 @@ export const useMovieStore = defineStore('movie', {
         const response = await httpClient.request<{ results: Movie[] }>({
           url: `${BASE_URL}/search/movie?query=${query}`,
           method: 'get',
-          headers: AUTH_HEADER
+          headers: AUTH_HEADER,
         })
         this.searchResults = response.body.results
       } catch (error) {
-        this.error = 'Failed to search movies'
+        this.searchResults = []
+        this.error = (error as Error).message
       } finally {
         this.loading = false
       }
@@ -81,14 +82,14 @@ export const useMovieStore = defineStore('movie', {
       try {
         this.loading = true
         const movieResponse = await httpClient.request<Movie>({
-            url: `${BASE_URL}/movie/${id}`,
-            method: 'get',
-            headers: AUTH_HEADER
-          })
-        
+          url: `${BASE_URL}/movie/${id}`,
+          method: 'get',
+          headers: AUTH_HEADER,
+        })
+
         this.currentMovie = movieResponse.body
       } catch (error) {
-        this.error = 'Failed to fetch movie details'
+        this.error = (error as Error).message
       } finally {
         this.loading = false
       }
@@ -99,11 +100,11 @@ export const useMovieStore = defineStore('movie', {
         const response = await httpClient.request<{ genres: Genre[] }>({
           url: `${BASE_URL}/genre/movie/list`,
           method: 'get',
-          headers: AUTH_HEADER
+          headers: AUTH_HEADER,
         })
         this.genres = response.body.genres
       } catch (error) {
-        this.error = 'Failed to fetch genres'
+        this.error = (error as Error).message
       }
     },
 
@@ -111,19 +112,19 @@ export const useMovieStore = defineStore('movie', {
       try {
         this.loading = true
         const params = new URLSearchParams()
-        
+
         if (this.filters.genre) {
           params.append('with_genres', this.filters.genre)
         }
-        
+
         if (this.filters.year) {
           params.append('primary_release_year', this.filters.year)
         }
-        
+
         const sortMap = {
           popularity: 'popularity.desc',
           rating: 'vote_average.desc',
-          date: 'primary_release_date.desc'
+          date: 'primary_release_date.desc',
         }
         params.append('sort_by', sortMap[this.filters.sortBy])
 
@@ -133,11 +134,11 @@ export const useMovieStore = defineStore('movie', {
           url: `${BASE_URL}/discover/movie`,
           method: 'get',
           headers: AUTH_HEADER,
-          params: paramsObject
+          params: paramsObject,
         })
         this.trending = response.body.results
       } catch (error) {
-        this.error = 'Failed to fetch movies'
+        this.error = (error as Error).message
       } finally {
         this.loading = false
       }
@@ -150,8 +151,8 @@ export const useMovieStore = defineStore('movie', {
 
     setActiveTab(tab: string) {
       this.activeTab = tab
-    }
-  }
+    },
+  },
 })
 
 export type ReturnTypeMovieStore = ReturnType<typeof useMovieStore>

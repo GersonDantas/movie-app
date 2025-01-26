@@ -1,6 +1,6 @@
 export class AccessDeniedError extends Error {
-  constructor () {
+  constructor() {
     super('Acesso negado. Verifique sua chave de API')
     this.name = 'AccessDeniedError'
   }
-} 
+}

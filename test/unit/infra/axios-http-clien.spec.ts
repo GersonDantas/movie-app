@@ -61,6 +61,6 @@ describe('AxiosHttpClient', () => {
 
     const promise = sut.request({ url: 'any_url', method: 'get' })
 
-    await expect(promise).rejects.toThrow('Failed to fetch trending movies')
+    await expect(promise).rejects.toThrow('Internal Server Error')
   })
 }) 

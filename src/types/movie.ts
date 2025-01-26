@@ -38,4 +38,4 @@ export interface MovieState {
   filters: FilterOptions
   genres: Genre[]
   activeTab: string
-} 
+}
