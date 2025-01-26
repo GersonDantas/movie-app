@@ -63,7 +63,7 @@
       </div>
     </div>
 
-    <div class="container mx-auto px-4 py-8 md:py-12">
+    <div class="container mx-auto px-4 py-8 md:py-12 sm:mt-[260px]">
       <h2 class="text-xl md:text-2xl font-bold mb-6">Top Billed Cast</h2>
       <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6">
         <div 
@@ -95,7 +95,6 @@ import { useMovieStore } from '@/store/movie-store'
 import { Progress } from '@/components/ui/progress'
 import dayjs from 'dayjs'
 import CircularProgress from '@/components/CircularProgress.vue'
-import type { MovieDetails } from '@/types/movie'
 
 const route = useRoute()
 const store = useMovieStore()
