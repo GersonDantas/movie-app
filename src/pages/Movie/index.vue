@@ -44,15 +44,14 @@
 
               <!-- Score -->
               <div class="flex items-center gap-4 mb-6">
-                <div class="w-16 h-16 rounded-full bg-tmdb-primary flex items-center justify-center">
-                  <Progress 
-                    :model-value="store.currentMovie.vote_average * 10" 
-                    class="w-12 h-12"
-                    data-testid="movie-score"
-                  />
-                </div>
+                <CircularProgress 
+                  :value="store.currentMovie.vote_average * 10"
+                  :size="64"
+                  :stroke-width="6"
+                  data-testid="movie-score"
+                />
                 <span class="text-2xl font-bold">
-                  {{ Math.round(store.currentMovie.vote_average * 10) }}%
+                  User Score
                 </span>
               </div>
 
@@ -101,6 +100,7 @@ import { useRoute } from 'vue-router'
 import { useMovieStore } from '@/store/movie-store'
 import { Progress } from '@/components/ui/progress'
 import dayjs from 'dayjs'
+import CircularProgress from '@/components/CircularProgress.vue'
 
 const route = useRoute()
 const store = useMovieStore()

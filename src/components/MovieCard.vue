@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import dayjs from 'dayjs'
-import { Progress } from '@/components/ui/progress'
 import type { Movie } from '@/types/movie'
-
+import CircularProgress from '@/components/CircularProgress.vue'
 const props = defineProps<{
   movie: Movie
 }>()
@@ -30,13 +29,11 @@ const formatDate = (date: string) => {
       />
       <div class="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/80">
         <div class="flex items-center gap-2">
-          <div class="w-10 h-10 rounded-full bg-tmdb-primary flex items-center justify-center">
-            <Progress 
-              :model-value="score" 
-              class="w-8 h-8"
-              data-testid="movie-score"
-            />
-          </div>
+          <CircularProgress 
+            :value="score"
+            :size="40"
+            data-testid="movie-score"
+          />
         </div>
       </div>
     </div>
