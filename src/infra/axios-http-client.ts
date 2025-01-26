@@ -13,11 +13,7 @@ export class AxiosHttpClient implements HttpClient {
         headers: data.headers
       })
     } catch (error: unknown) {
-      if (axios.isAxiosError(error) && error.response) {
-        axiosResponse = error.response
-      } else {
-        throw error
-      }
+      axiosResponse = error.response
     }
     return {
       statusCode: axiosResponse.status,
