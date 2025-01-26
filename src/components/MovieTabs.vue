@@ -6,6 +6,8 @@ import { computed } from 'vue'
 const store = useMovieStore()
 const activeTab = computed(() => store.activeTab)
 
+const customClass = ['text-white px-4 py-2 rounded-full hover:bg-opacity-90 bg-gray-700']
+
 const setActiveTab = (tab: string) => {
   store.activeTab = tab
   if (tab === 'trending') store.fetchTrending()
@@ -18,7 +20,7 @@ const setActiveTab = (tab: string) => {
     <Button 
       variant="secondary"
       data-testid="trending-tab"
-      :class="{ 'bg-tmdb-secondary': activeTab === 'trending', 'bg-gray-700': activeTab !== 'trending' }"
+      :class="[...customClass, { 'bg-tmdb-secondary': activeTab === 'trending' }]"
       @click="setActiveTab('trending')"
     >
       Trending
@@ -26,7 +28,7 @@ const setActiveTab = (tab: string) => {
     <Button 
       variant="secondary"
       data-testid="popular-tab"
-      :class="{ 'bg-tmdb-secondary': activeTab === 'popular', 'bg-gray-700': activeTab !== 'popular' }"
+      :class="[...customClass, { 'bg-tmdb-secondary': activeTab === 'popular' }]"
       @click="setActiveTab('popular')"
     >
       Popular
