@@ -3,6 +3,7 @@ import type { MovieState, FilterOptions, Movie, Cast, Genre } from '@/types/movi
 import type { HttpClient } from '@/types/http-client'
 import { AxiosHttpClient } from '@/infra/axios-http-client'
 import { AccessDeniedError, NotFoundError, UnexpectedError } from '@/errors'
+import axios from 'axios';
 
 const httpClient: HttpClient = new AxiosHttpClient()
 const BASE_URL = import.meta.env.VITE_TMDB_BASE_URL
@@ -117,14 +118,14 @@ export const useMovieStore = defineStore('movie', {
     async fetchMoviesWithFilters() {
       try {
         this.loading = true
-        const params: Record<string, string> = {}
+        const params = new URLSearchParams()
         
         if (this.filters.genre) {
-          params.with_genres = this.filters.genre
+          params.append('with_genres', this.filters.genre)
         }
         
         if (this.filters.year) {
-          params.primary_release_year = this.filters.year
+          params.append('primary_release_year', this.filters.year)
         }
         
         const sortMap = {
@@ -132,13 +133,15 @@ export const useMovieStore = defineStore('movie', {
           rating: 'vote_average.desc',
           date: 'primary_release_date.desc'
         }
-        params.sort_by = sortMap[this.filters.sortBy]
+        params.append('sort_by', sortMap[this.filters.sortBy])
+
+        const paramsObject = Object.fromEntries(params.entries())
 
         const response = await httpClient.request<{ results: Movie[] }>({
           url: `${BASE_URL}/discover/movie`,
           method: 'get',
           headers: AUTH_HEADER,
-          params
+          params: paramsObject
         })
         this.trending = response.body.results
       } catch (error) {
