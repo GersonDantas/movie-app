@@ -32,12 +32,10 @@ describe('MovieTabs', () => {
   it('changes tab and fetches data when clicking tabs', async () => {
     const { wrapper, store } = mockSut()
 
-    // Click popular tab
     await wrapper.find('[data-testid="popular-tab"]').trigger('click')
     expect(store.activeTab).toBe('popular')
     expect(store.fetchPopular).toHaveBeenCalled()
 
-    // Click trending tab
     await wrapper.find('[data-testid="trending-tab"]').trigger('click')
     expect(store.activeTab).toBe('trending')
     expect(store.fetchTrending).toHaveBeenCalled()
@@ -46,11 +44,9 @@ describe('MovieTabs', () => {
   it('applies correct styles to active tab', async () => {
     const { wrapper, store } = mockSut()
 
-    // Initial state
     expect(wrapper.find('[data-testid="trending-tab"]').classes()).toContain('bg-tmdb-secondary')
     expect(wrapper.find('[data-testid="popular-tab"]').classes()).toContain('bg-gray-700')
 
-    // Change tab
     store.activeTab = 'popular'
     await wrapper.vm.$nextTick()
 
