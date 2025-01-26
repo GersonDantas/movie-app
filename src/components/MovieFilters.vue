@@ -31,14 +31,15 @@ const sortOptions = [
 <template>
   <div class="flex gap-4 mb-6">
     <Select v-model="filters.sortBy" @update:modelValue="updateFilters">
-      <SelectTrigger data-testid="sort-select" class="w-[180px]">
+      <SelectTrigger data-testid="sort-select" class="bg-gray-700 text-white px-4 py-2 rounded-full w-64 focus:outline-none focus:ring-2 focus:ring-tmdb-secondary hover:bg-opacity-90">
         <SelectValue placeholder="Sort by" />
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent class="bg-gray-700 rounded-lg mt-2 text-white">
         <SelectItem 
           v-for="option in sortOptions" 
           :key="option.value" 
           :value="option.value"
+          class="px-6 py-2 hover:bg-gray-600 cursor-pointer"
         >
           {{ option.label }}
         </SelectItem>
@@ -46,15 +47,16 @@ const sortOptions = [
     </Select>
 
     <Select v-model="filters.genre" @update:modelValue="updateFilters">
-      <SelectTrigger data-testid="genre-select" class="w-[180px]">
+      <SelectTrigger data-testid="genre-select" class="bg-gray-700 text-white px-4 py-2 rounded-full w-64 focus:outline-none focus:ring-2 focus:ring-tmdb-secondary hover:bg-opacity-90">
         <SelectValue placeholder="Select genre" />
       </SelectTrigger>
-      <SelectContent data-testid="genre-select-content">
-        <SelectItem value="all">All Genres</SelectItem>
+      <SelectContent data-testid="genre-select-content" class="bg-gray-700 rounded-lg mt-2 text-white">
+        <SelectItem value="all" class="px-4 py-2 hover:bg-gray-600 cursor-pointer">All Genres</SelectItem>
         <SelectItem 
           v-for="genre in store.genres" 
           :key="genre.id" 
           :value="genre.id.toString()"
+          class="px-6 py-2 hover:bg-gray-600 cursor-pointer"
         >
           {{ genre.name }}
         </SelectItem>
@@ -62,15 +64,16 @@ const sortOptions = [
     </Select>
 
     <Select v-model="filters.year" @update:modelValue="updateFilters">
-      <SelectTrigger data-testid="year-select" class="w-[180px]">
+      <SelectTrigger data-testid="year-select" class="bg-gray-700 text-white px-4 py-2 rounded-full w-64 focus:outline-none focus:ring-2 focus:ring-tmdb-secondary hover:bg-opacity-90">
         <SelectValue placeholder="Select year" />
       </SelectTrigger>
-      <SelectContent>
-        <SelectItem value="all">All Years</SelectItem>
+      <SelectContent class="bg-gray-700 rounded-lg mt-2 text-white">
+        <SelectItem value="all" class="px-4 py-2 hover:bg-gray-600 cursor-pointer">All Years</SelectItem>
         <SelectItem 
           v-for="year in years" 
           :key="year" 
           :value="year.toString()"
+          class="px-6 py-2 hover:bg-gray-600 cursor-pointer"
         >
           {{ year }}
         </SelectItem>
