@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import type { MovieState, FilterOptions, Movie, Cast, Genre } from '@/types/movie'
-import type { HttpClient } from '@/data/http-client'
+import type { HttpClient } from '@/types/http-client'
 import { AxiosHttpClient } from '@/infra/axios-http-client'
 
 const httpClient: HttpClient = new AxiosHttpClient()
@@ -66,10 +66,9 @@ export const useMovieStore = defineStore('movie', {
       try {
         this.loading = true
         const response = await httpClient.request<{ results: Movie[] }>({
-          url: `${BASE_URL}/search/movie`,
+          url: `${BASE_URL}/search/movie?query=${query}`,
           method: 'get',
-          headers: AUTH_HEADER,
-          params: { query }
+          headers: AUTH_HEADER
         })
         this.searchResults = response.body.results
       } catch (error) {
