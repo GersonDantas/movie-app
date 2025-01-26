@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { MovieState, FilterOptions, Movie, Genre } from '@/types/movie'
+import type { MovieState, FilterOptions, Movie, Genre, MovieCredits } from '@/types/movie'
 import type { HttpClient } from '@/types/http-client'
 import { AxiosHttpClient } from '@/infra/axios-http-client'
 
@@ -16,14 +16,14 @@ export const useMovieStore = defineStore('movie', {
     popular: [],
     searchResults: [],
     currentMovie: null,
-    currentMovieCast: null,
+    currentMovieCredits: null,
     loading: false,
     error: null,
     filters: {
       sortBy: 'popularity',
       genre: '',
       year: '',
-    } as FilterOptions,
+    },
     genres: [],
     activeTab: 'trending',
   }),
@@ -81,13 +81,21 @@ export const useMovieStore = defineStore('movie', {
     async fetchMovieDetails(id: string) {
       try {
         this.loading = true
-        const movieResponse = await httpClient.request<Movie>({
-          url: `${BASE_URL}/movie/${id}`,
-          method: 'get',
-          headers: AUTH_HEADER,
-        })
+        const [movieResponse, creditsResponse] = await Promise.all([
+          httpClient.request<Movie>({
+            url: `${BASE_URL}/movie/${id}`,
+            method: 'get',
+            headers: AUTH_HEADER,
+          }),
+          httpClient.request<MovieCredits>({
+            url: `${BASE_URL}/movie/${id}/credits`,
+            method: 'get',
+            headers: AUTH_HEADER,
+          })
+        ])
 
         this.currentMovie = movieResponse.body
+        this.currentMovieCredits = creditsResponse.body
       } catch (error) {
         this.error = (error as Error).message
       } finally {

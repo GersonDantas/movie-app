@@ -64,10 +64,10 @@
     </div>
 
     <div class="container mx-auto px-4 py-8 md:py-12">
-      <h2 class="text-xl md:text-2xl font-bold mb-6">Cast</h2>
+      <h2 class="text-xl md:text-2xl font-bold mb-6">Top Billed Cast</h2>
       <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6">
         <div 
-          v-for="actor in store.currentMovieCast?.slice(0, 12)" 
+          v-for="actor in store.currentMovieCredits?.cast?.slice(0, 12)" 
           :key="actor.id"
           class="bg-gray-800 rounded-lg overflow-hidden"
           data-testid="cast-card"
@@ -89,12 +89,13 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useMovieStore } from '@/store/movie-store'
 import { Progress } from '@/components/ui/progress'
 import dayjs from 'dayjs'
 import CircularProgress from '@/components/CircularProgress.vue'
+import type { MovieDetails } from '@/types/movie'
 
 const route = useRoute()
 const store = useMovieStore()
