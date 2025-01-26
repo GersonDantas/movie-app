@@ -2,7 +2,6 @@ import { defineStore } from 'pinia'
 import type { MovieState, FilterOptions, Movie, Genre } from '@/types/movie'
 import type { HttpClient } from '@/types/http-client'
 import { AxiosHttpClient } from '@/infra/axios-http-client'
-import { AccessDeniedError, NotFoundError, UnexpectedError } from '@/errors'
 
 const httpClient: HttpClient = new AxiosHttpClient()
 const BASE_URL = import.meta.env.VITE_TMDB_BASE_URL
