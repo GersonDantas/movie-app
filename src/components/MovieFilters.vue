@@ -51,7 +51,7 @@ const sortOptions = [
         <SelectValue placeholder="Select genre" />
       </SelectTrigger>
       <SelectContent data-testid="genre-select-content" class="bg-gray-700 rounded-lg mt-2 text-white">
-        <SelectItem value="all" class="px-4 py-2 hover:bg-gray-600 cursor-pointer">All Genres</SelectItem>
+        <SelectItem value="all" class="px-6 py-2 hover:bg-gray-600 cursor-pointer">All Genres</SelectItem>
         <SelectItem 
           v-for="genre in store.genres" 
           :key="genre.id" 
@@ -68,7 +68,7 @@ const sortOptions = [
         <SelectValue placeholder="Select year" />
       </SelectTrigger>
       <SelectContent class="bg-gray-700 rounded-lg mt-2 text-white">
-        <SelectItem value="all" class="px-4 py-2 hover:bg-gray-600 cursor-pointer">All Years</SelectItem>
+        <SelectItem value="all" class="px-6 py-2 hover:bg-gray-600 cursor-pointer">All Years</SelectItem>
         <SelectItem 
           v-for="year in years" 
           :key="year" 
