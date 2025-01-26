@@ -23,7 +23,10 @@ const mockMovie = {
   title: 'Test Movie',
   poster_path: '/test.jpg',
   release_date: '2024-01-01',
-  vote_average: 7.5
+  vote_average: 7.5,
+  backdrop_path: '/backdrop.jpg',
+  overview: 'Test overview',
+  runtime: 120
 }
 
 const makeSut = (): SutTypes => {

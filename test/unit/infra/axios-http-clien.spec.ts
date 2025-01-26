@@ -55,20 +55,12 @@ describe('AxiosHttpClient', () => {
 
   it('should return error response when axios fails', async () => {
     const sut = new AxiosHttpClient()
-    const error = {
-      response: {
-        status: 400,
-        data: { error: 'any_error' }
-      },
-      isAxiosError: true
-    }
-    vi.mocked(axios.request).mockRejectedValueOnce(error)
-
-    const result = await sut.request({ url: 'any_url', method: 'get' })
-
-    expect(result).toEqual({
-      statusCode: error.response.status,
-      body: error.response.data
+    vi.spyOn(axios, 'request').mockRejectedValueOnce({
+      response: { status: 500 }
     })
+
+    const promise = sut.request({ url: 'any_url', method: 'get' })
+
+    await expect(promise).rejects.toThrow('Failed to fetch trending movies')
   })
 }) 

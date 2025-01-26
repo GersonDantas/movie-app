@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
 import DefaultLayout from '@/layouts/default-layout.vue'
 import { createRouter, createWebHistory } from 'vue-router'
