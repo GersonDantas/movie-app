@@ -88,6 +88,6 @@ describe('Search Component', () => {
 
     await router.push({ path: '/search', query: { q: 'test movie' }})
     
-    expect(store.searchMovies).toHaveBeenCalledWith('test movie')
+    expect(store.searchMovies).toHaveBeenCalledWith('test movie', 1)
   })
 }) 
