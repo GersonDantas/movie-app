@@ -86,7 +86,6 @@ The project follows a clean and modular architecture:
 ### CI/CD
 - [ ] Deploy pipeline
 - [ ] Static code analysis
-- [ ] Semantic versioning
 - [ ] Docker
 
 ## 🧪 Testing
