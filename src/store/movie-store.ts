@@ -99,7 +99,7 @@ export const useMovieStore = defineStore('movie', {
           results: Movie[]
           page: number
           total_pages: number
-          total_results: number 
+          total_results: number
         }>({
           url: `${BASE_URL}/search/movie`,
           method: 'get',
