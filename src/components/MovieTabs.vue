@@ -8,10 +8,11 @@ const activeTab = computed(() => store.activeTab)
 
 const customClass = ['text-white px-4 py-2 rounded-full hover:bg-opacity-90 bg-gray-700']
 
-const setActiveTab = (tab: string) => {
+const setActiveTab = async (tab: string) => {
   store.activeTab = tab
-  if (tab === 'trending') store.fetchTrending()
-  if (tab === 'popular') store.fetchPopular()
+  if (tab === 'trending') await store.fetchTrending(1)
+  if (tab === 'popular') await store.fetchPopular(1)
+  store.pagination.currentPage = 0
 }
 </script>
 

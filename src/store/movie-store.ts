@@ -64,15 +64,27 @@ export const useMovieStore = defineStore('movie', {
       }
     },
 
-    async fetchPopular() {
+    async fetchPopular(page = 1) {
       try {
         this.loading = true
-        const response = await httpClient.request<{ results: Movie[] }>({
+        const response = await httpClient.request<{ 
+          results: Movie[]
+          page: number
+          total_pages: number
+          total_results: number
+        }>({
           url: `${BASE_URL}/movie/popular`,
           method: 'get',
           headers: AUTH_HEADER,
+          params: { page: page.toString() }
         })
         this.popular = response.body.results
+        this.pagination = {
+          currentPage: response.body.page - 1,
+          totalPages: response.body.total_pages,
+          totalResults: response.body.total_results,
+          perPage: 20
+        }
       } catch (error) {
         this.error = (error as Error).message
       } finally {
@@ -80,15 +92,31 @@ export const useMovieStore = defineStore('movie', {
       }
     },
 
-    async searchMovies(query: string) {
+    async searchMovies(query: string, page = 1) {
       try {
         this.loading = true
-        const response = await httpClient.request<{ results: Movie[] }>({
-          url: `${BASE_URL}/search/movie?query=${query}`,
+        const response = await httpClient.request<{ 
+          results: Movie[]
+          page: number
+          total_pages: number
+          total_results: number 
+        }>({
+          url: `${BASE_URL}/search/movie`,
           method: 'get',
           headers: AUTH_HEADER,
+          params: { 
+            query,
+            page: page.toString()
+          }
         })
+        
         this.searchResults = response.body.results
+        this.pagination = {
+          currentPage: response.body.page - 1,
+          totalPages: response.body.total_pages,
+          totalResults: response.body.total_results,
+          perPage: 20
+        }
       } catch (error) {
         this.searchResults = []
         this.error = (error as Error).message

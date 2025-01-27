@@ -1,7 +1,7 @@
 <template>
   <div class="container mx-auto px-4 py-8">
     <h1 class="text-4xl font-bold mb-8">Welcome to TMDB</h1>
-    <h2 class="text-2xl font-bold mb-4">Trending</h2>
+    <h2 class="text-2xl font-bold mb-4">{{ store.activeTab === 'trending' ? 'Trending' : 'Popular' }}</h2>
 
     <MovieTabs :active-tab="store.activeTab" />
     <MovieFilters @filter="store.updateFilters" />
@@ -45,6 +45,7 @@ import { Progress } from '@/components/ui/progress'
 const store = useMovieStore()
 
 const handlePageChange = async (page: number) => {
+  debugger
   if (store.activeTab === 'trending') {
     await store.fetchTrending(page + 1)
   } else {

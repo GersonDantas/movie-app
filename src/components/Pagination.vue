@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Button } from '@/components/ui/button'
-import { FaAngleRight, FaAngleDoubleRight, FaAngleDoubleLeft, FaAngleLeft } from "oh-vue-icons/icons"
 import { computed } from 'vue'
 
 interface Props {
