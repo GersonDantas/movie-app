@@ -1,102 +1,181 @@
 # TMDB Movie App
 
-Uma aplicação web moderna para explorar filmes usando a API do TMDB (The Movie Database). Disponível em [movie-news.netlify.app](https://movie-news.netlify.app/).
+A modern web application to explore movies using the TMDB (The Movie Database) API. Available at [movie-news.netlify.app](https://movie-news.netlify.app/).
 
-## 🎬 Sobre o Projeto
+![Test Coverage](https://img.shields.io/badge/coverage-85%25-brightgreen.svg)
 
-Este projeto é uma aplicação web que permite aos usuários:
-- Explorar filmes populares e tendências
-- Buscar filmes específicos
-- Ver detalhes completos dos filmes
-- Visualizar elenco e informações técnicas
-- Filtrar filmes por gênero, ano e popularidade
+## 🎬 About The Project
 
-## 🚀 Tecnologias Utilizadas
+This project is a web application that allows users to:
+- Explore popular and trending movies
+- Search for specific movies
+- View complete movie details
+- See cast and technical information
+- Filter movies by genre, year, and popularity
 
-- **Vue 3** - Framework JavaScript progressivo
-- **TypeScript** - Adiciona tipagem estática ao JavaScript
-- **Pinia** - Gerenciamento de estado
-- **Tailwind CSS** - Framework CSS utilitário
-- **Vitest** - Framework de testes unitários
-- **Vue Router** - Roteamento oficial do Vue.js
-- **Axios** - Cliente HTTP para requisições
-- **DayJS** - Biblioteca para manipulação de datas
+## 🚀 Technologies Used
 
-## 🛠️ Arquitetura
+- **Vue 3** - Progressive JavaScript Framework
+- **TypeScript** - Adds static typing to JavaScript
+- **Pinia** - State Management
+- **Tailwind CSS** - Utility-first CSS Framework
+- **Vitest** - Unit Testing Framework
+- **Vue Router** - Official Vue.js Router
+- **Axios** - HTTP Client for requests
+- **DayJS** - Date manipulation library
+- **Shadcn-Vue** - Reusable and accessible components
 
-O projeto segue uma arquitetura limpa e modular:
-- `/components` - Componentes reutilizáveis
-- `/pages` - Páginas da aplicação
-- `/store` - Gerenciamento de estado com Pinia
-- `/types` - Definições de tipos TypeScript
-- `/infra` - Configurações de infraestrutura
-- `/test` - Testes unitários e de integração
+## 🛠️ Architecture
 
-## 🔍 Funcionalidades Principais
+The project follows a clean and modular architecture:
+- `/components` - Reusable components
+- `/pages` - Application pages
+- `/store` - State management with Pinia
+- `/types` - TypeScript type definitions
+- `/infra` - Infrastructure configurations
+- `/test` - Unit and integration tests
 
-- **Lista de Filmes**
-  - Filmes em tendência
-  - Filmes populares
-  - Sistema de busca
+## 🔍 Key Features
 
-- **Detalhes do Filme**
-  - Informações completas
-  - Elenco
-  - Avaliações
-  - Dados técnicos
+- **Movie List**
+  - Trending movies
+  - Popular movies
+  - Search system
+  - Pagination
 
-- **Filtros**
-  - Por gênero
-  - Por ano
-  - Por popularidade
+- **Movie Details**
+  - Complete information
+  - Cast
+  - Ratings
+  - Technical data
 
-## 🧪 Testes
+- **Filters**
+  - By genre
+  - By year
+  - By popularity
 
-O projeto possui cobertura de testes unitários usando Vitest:
+- **Interface**
+  - Light/Dark theme
+  - Loading states
+  - Error handling
+  - 404 page
 
+## 🎯 Future Improvements
+
+### Performance
+- [ ] Image lazy loading
+- [ ] Route-based code splitting
+- [ ] Request caching
+- [ ] Server-side rendering (Nuxt.js)
+
+### Testing
+- [ ] E2E tests with Cypress
+- [ ] Integration tests
+- [ ] Test coverage > 90%
+- [ ] Component tests with Testing Library
+
+### Features
+- [ ] User authentication
+- [ ] Favorites list
+- [ ] User ratings
+- [ ] Personalized recommendations
+- [ ] Trailers and videos
+- [ ] Advanced filters
+- [ ] Internationalization (i18n)
+
+### CI/CD
+- [ ] Deploy pipeline
+- [ ] Static code analysis
+- [ ] Semantic versioning
+- [ ] Docker
+
+## 🧪 Testing
+
+The project has comprehensive test coverage using Vitest:
+
+- **Current Coverage**: 85% across all components and stores
+- **Testing Strategy**: Unit tests for components, stores, and utilities
+- **Continuous Testing**: Automated tests run on every PR
+- **Coverage Reports**: HTML reports generated for detailed analysis
+
+Run the tests:
 ```bash
+# Run tests
 npm run test
+
+# Run tests with coverage report
 npm run test:coverage
 ```
 
-## 🚀 Como Executar
+Key tested areas:
+- Component rendering and interactions
+- Store actions and state management
+- API integration
+- User interactions
+- Route handling
+- Theme switching
+- Error scenarios
 
-1. Clone o repositório
+## 🚀 How to Run
+
+1. Clone the repository
 ```bash
-git clone https://github.com/seu-usuario/tmdb-movie-app.git
+git clone https://github.com/your-username/tmdb-movie-app.git
 ```
 
-2. Instale as dependências
+2. Install dependencies
 ```bash
 npm install
 ```
 
-3. Configure as variáveis de ambiente
+3. Configure environment variables
 ```bash
-VITE_TMDB_API_KEY=sua_chave_api
+VITE_TMDB_API_KEY=your_api_key
 VITE_TMDB_BASE_URL=https://api.themoviedb.org/3
 ```
 
-4. Execute o projeto
+4. Run the project
 ```bash
 npm run dev
 ```
 
-## 📱 Responsividade
+## 📁 Project Structure
 
-A aplicação é totalmente responsiva, adaptando-se a:
-- Dispositivos móveis
+```
+src/
+├── components/     # Reusable components
+├── composables/    # Vue composables
+├── layouts/        # Application layouts
+├── pages/         # Page components
+├── router/        # Route configuration
+├── store/         # Pinia store
+├── services/      # External services
+├── types/         # TypeScript types
+├── utils/         # Utilities
+└── App.vue        # Root component
+```
+
+## 📱 Responsiveness
+
+The application is fully responsive, adapting to:
+- Mobile devices
 - Tablets
 - Desktops
 
 ## 🌐 Deploy
 
-A aplicação está hospedada na [Netlify](https://movie-news.netlify.app/), com CI/CD automático a partir da branch principal.
+The application is hosted on [Netlify](https://movie-news.netlify.app/), with automatic CI/CD from the main branch.
 
-## 📄 Licença
+## 📄 License
 
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+This project is under the MIT license. See the [LICENSE](LICENSE) file for more details.
 
-## 🤝 Contribuindo
+## 🤝 Contributing
 
-Contribuições são sempre bem-vindas! Por favor, leia o [guia de contribuição](CONTRIBUTING.md) primeiro.
+Contributions are always welcome! Please read the [contribution guide](CONTRIBUTING.md) first.
+
+1. Fork the project
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request

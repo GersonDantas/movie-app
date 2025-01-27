@@ -8,8 +8,18 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     coverage: {
-      provider: 'v8',
+      exclude: [
+        '**/*.config.*',
+        'src/main.ts',
+        'src/types/movie.ts',
+        'src/router/**',
+        'node_modules/**',
+        'test/**'
+      ],
       reporter: ['text', 'json', 'html'],
+      include: [
+        'src/**/*.{js,ts,vue}'
+      ]
     },
   },
   resolve: {
@@ -17,4 +27,4 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src')
     }
   }
-}) 
+});
