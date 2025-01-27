@@ -26,18 +26,37 @@ export const useMovieStore = defineStore('movie', {
     },
     genres: [],
     activeTab: 'trending',
+    pagination: {
+      currentPage: 0,
+      totalPages: 0,
+      totalResults: 0,
+      perPage: 20
+    }
   }),
 
   actions: {
-    async fetchTrending() {
+    async fetchTrending(page = 1) {
       try {
         this.loading = true
-        const response = await httpClient.request<{ results: Movie[] }>({
+        const response = await httpClient.request<{ 
+          results: Movie[]
+          page: number
+          total_pages: number
+          total_results: number
+        }>({
           url: `${BASE_URL}/trending/movie/week`,
           method: 'get',
           headers: AUTH_HEADER,
+          params: { page: page.toString() }
         })
+        
         this.trending = response.body.results
+        this.pagination = {
+          currentPage: response.body.page - 1,
+          totalPages: response.body.total_pages,
+          totalResults: response.body.total_results,
+          perPage: 20
+        }
       } catch (error) {
         this.error = (error as Error).message
       } finally {

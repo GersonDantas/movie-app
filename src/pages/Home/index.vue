@@ -21,6 +21,15 @@
         :movie="movie"
       />
     </div>
+
+    <div v-if="!store.loading && !store.error" class="mt-8">
+      <Pagination
+        :page-index="store.pagination.currentPage"
+        :total-count="store.pagination.totalResults"
+        :per-page="store.pagination.perPage"
+        @page-change="handlePageChange"
+      />
+    </div>
   </div>
 </template>
 
@@ -30,13 +39,23 @@ import { useMovieStore } from '@/store/movie-store'
 import MovieCard from '@/components/MovieCard.vue'
 import MovieFilters from '@/components/MovieFilters.vue'
 import MovieTabs from '@/components/MovieTabs.vue'
+import Pagination from '@/components/Pagination.vue'
 import { Progress } from '@/components/ui/progress'
 
 const store = useMovieStore()
 
+const handlePageChange = async (page: number) => {
+  if (store.activeTab === 'trending') {
+    await store.fetchTrending(page + 1)
+  } else {
+    await store.fetchPopular(page + 1)
+  }
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
 onMounted(async () => {
   await Promise.all([
-    store.fetchTrending(),
+    store.fetchTrending(1),
     store.fetchGenres()
   ])
 })

@@ -35,6 +35,13 @@ export interface FilterOptions {
   year: string
 }
 
+export interface PaginationState {
+  currentPage: number
+  totalPages: number
+  totalResults: number
+  perPage: number
+}
+
 export interface MovieState {
   trending: Movie[]
   popular: Movie[]
@@ -46,6 +53,7 @@ export interface MovieState {
   filters: FilterOptions
   genres: Genre[]
   activeTab: string
+  pagination: PaginationState
 }
 
 export interface MovieCredits {
