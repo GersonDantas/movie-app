@@ -1,3 +1,43 @@
+<script setup lang="ts">
+import { watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useMovieStore } from '@/store/movie-store'
+import dayjs from 'dayjs'
+import { computed } from 'vue'
+import Pagination from '@/components/Pagination.vue'
+
+const route = useRoute()
+const router = useRouter()
+const store = useMovieStore()
+
+const formatDate = (date: string) => {
+  return dayjs(date).format('MMM D, YYYY')
+}
+
+const searchResults = computed(() => store.searchResults)
+
+const handlePageChange = async (page: number) => {
+  await router.push({ 
+    query: { 
+      ...route.query,
+      page: (page + 1).toString()
+    }
+  })
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
+watch(
+  () => route.query,
+  async (query) => {
+    if (query.q) {
+      const page = Number(query.page) || 1
+      await store.searchMovies(query.q as string, page)
+    }
+  },
+  { immediate: true }
+)
+</script> 
+
 <template>
   <div class="container mx-auto px-4 py-8">
     <div class="mb-8">
@@ -42,43 +82,3 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-import { watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { useMovieStore } from '@/store/movie-store'
-import dayjs from 'dayjs'
-import { computed } from 'vue'
-import Pagination from '@/components/Pagination.vue'
-
-const route = useRoute()
-const router = useRouter()
-const store = useMovieStore()
-
-const formatDate = (date: string) => {
-  return dayjs(date).format('MMM D, YYYY')
-}
-
-const searchResults = computed(() => store.searchResults)
-
-const handlePageChange = async (page: number) => {
-  await router.push({ 
-    query: { 
-      ...route.query,
-      page: (page + 1).toString()
-    }
-  })
-  window.scrollTo({ top: 0, behavior: 'smooth' })
-}
-
-watch(
-  () => route.query,
-  async (query) => {
-    if (query.q) {
-      const page = Number(query.page) || 1
-      await store.searchMovies(query.q as string, page)
-    }
-  },
-  { immediate: true }
-)
-</script> 

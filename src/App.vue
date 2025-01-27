@@ -20,7 +20,6 @@ onMounted(() => {
 </template>
 
 <style>
-/* Transition animations */
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.2s ease;
@@ -31,7 +30,6 @@ onMounted(() => {
   opacity: 0;
 }
 
-/* Global styles */
 body {
   @apply antialiased text-gray-100;
 }

@@ -1,3 +1,32 @@
+<script setup lang="ts">
+import { onMounted } from 'vue'
+import { useMovieStore } from '@/store/movie-store'
+import MovieCard from '@/components/MovieCard.vue'
+import MovieFilters from '@/components/MovieFilters.vue'
+import MovieTabs from '@/components/MovieTabs.vue'
+import Pagination from '@/components/Pagination.vue'
+import { Progress } from '@/components/ui/progress'
+
+const store = useMovieStore()
+
+const handlePageChange = async (page: number) => {
+  debugger
+  if (store.activeTab === 'trending') {
+    await store.fetchTrending(page + 1)
+  } else {
+    await store.fetchPopular(page + 1)
+  }
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
+onMounted(async () => {
+  await Promise.all([
+    store.fetchTrending(1),
+    store.fetchGenres()
+  ])
+})
+</script> 
+
 <template>
   <div class="container mx-auto px-4 py-8">
     <h1 class="text-4xl font-bold mb-8">Welcome to TMDB</h1>
@@ -32,32 +61,3 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-import { onMounted } from 'vue'
-import { useMovieStore } from '@/store/movie-store'
-import MovieCard from '@/components/MovieCard.vue'
-import MovieFilters from '@/components/MovieFilters.vue'
-import MovieTabs from '@/components/MovieTabs.vue'
-import Pagination from '@/components/Pagination.vue'
-import { Progress } from '@/components/ui/progress'
-
-const store = useMovieStore()
-
-const handlePageChange = async (page: number) => {
-  debugger
-  if (store.activeTab === 'trending') {
-    await store.fetchTrending(page + 1)
-  } else {
-    await store.fetchPopular(page + 1)
-  }
-  window.scrollTo({ top: 0, behavior: 'smooth' })
-}
-
-onMounted(async () => {
-  await Promise.all([
-    store.fetchTrending(1),
-    store.fetchGenres()
-  ])
-})
-</script> 

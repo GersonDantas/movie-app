@@ -1,3 +1,22 @@
+<script setup lang="ts">
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { Button } from '@/components/ui/button'
+import ToggleTheme from '@/components/theme/ToggleTheme.vue'
+
+const router = useRouter()
+const searchQuery = ref('')
+
+const handleSearch = () => {
+  if (searchQuery.value.trim()) {
+    router.push({
+      path: '/search',
+      query: { q: searchQuery.value }
+    })
+  }
+}
+</script> 
+
 <template>
   <div class="min-h-screen bg-background text-foreground">
     <header class="bg-tmdb-primary">
@@ -40,22 +59,3 @@
     </footer>
   </div>
 </template>
-
-<script setup lang="ts">
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { Button } from '@/components/ui/button'
-import ToggleTheme from '@/components/theme/ToggleTheme.vue'
-
-const router = useRouter()
-const searchQuery = ref('')
-
-const handleSearch = () => {
-  if (searchQuery.value.trim()) {
-    router.push({
-      path: '/search',
-      query: { q: searchQuery.value }
-    })
-  }
-}
-</script> 

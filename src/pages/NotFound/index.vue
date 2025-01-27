@@ -1,3 +1,10 @@
+<script setup lang="ts">
+import { useRouter } from 'vue-router'
+import { Button } from '@/components/ui/button'
+
+const router = useRouter()
+</script> 
+
 <template>
   <div class="min-h-[80vh] flex items-center justify-center">
     <div class="text-center">
@@ -16,10 +23,3 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-import { useRouter } from 'vue-router'
-import { Button } from '@/components/ui/button'
-
-const router = useRouter()
-</script> 
