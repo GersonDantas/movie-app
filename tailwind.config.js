@@ -26,6 +26,10 @@ export default {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        tmdb: {
+          primary: "hsl(var(--tmdb-primary))",
+          secondary: "hsl(var(--tmdb-secondary))",
+        },
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
@@ -54,11 +58,6 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        'tmdb': {
-          'primary': '#032541',
-          'secondary': '#01b4e4',
-          'light': '#f5f5f5',
-        }
       },
       borderRadius: {
         xl: "calc(var(--radius) + 4px)",

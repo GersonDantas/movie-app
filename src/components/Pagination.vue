@@ -40,7 +40,7 @@ const goToLastPage = () => handlePageChange(pages.value - 1)
       <div class="flex items-center gap-2">
         <Button 
           variant="outline" 
-          class="rounded-lg bg-gray-800 hover:bg-gray-700"
+          class="rounded-lg bg-card hover:bg-muted"
           :disabled="pageIndex === 0"
           @click="goToFirstPage"
         >
@@ -49,7 +49,7 @@ const goToLastPage = () => handlePageChange(pages.value - 1)
         </Button>
         <Button 
           variant="outline" 
-          class="rounded-lg bg-gray-800 hover:bg-gray-700"
+          class="rounded-lg bg-card hover:bg-muted"
           :disabled="pageIndex === 0"
           @click="goToPreviousPage"
         >
@@ -58,7 +58,7 @@ const goToLastPage = () => handlePageChange(pages.value - 1)
         </Button>
         <Button 
           variant="outline" 
-          class="rounded-lg bg-gray-800 hover:bg-gray-700"
+          class="rounded-lg bg-card hover:bg-muted"
           :disabled="pageIndex === pages - 1"
           @click="goToNextPage"
         >
@@ -67,7 +67,7 @@ const goToLastPage = () => handlePageChange(pages.value - 1)
         </Button>
         <Button 
           variant="outline" 
-          class="rounded-lg bg-gray-800 hover:bg-gray-700"
+          class="rounded-lg bg-card hover:bg-muted"
           :disabled="pageIndex === pages - 1"
           @click="goToLastPage"
         >
