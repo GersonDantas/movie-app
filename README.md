@@ -29,7 +29,6 @@ O projeto segue uma arquitetura limpa e modular:
 - `/pages` - Páginas da aplicação
 - `/store` - Gerenciamento de estado com Pinia
 - `/types` - Definições de tipos TypeScript
-- `/services` - Serviços e integrações
 - `/infra` - Configurações de infraestrutura
 - `/test` - Testes unitários e de integração
 

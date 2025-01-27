@@ -2,9 +2,9 @@
   <div class="min-h-screen bg-gray-900 text-white">
     <header class="bg-tmdb-primary">
       <nav class="container mx-auto px-4 py-4 flex items-center justify-between">
-        <router-link to="/" class="text-2xl font-bold text-tmdb-secondary">TMDB</router-link>
+        <router-link to="/" class="text-1xl md:text-2xl font-bold text-tmdb-secondary">TMDB</router-link>
         
-        <div class="flex items-center space-x-4">
+        <div class="flex items-center space-x-3 gap-2">
           <div class="relative">
             <input 
               type="text" 
