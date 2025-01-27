@@ -10,7 +10,6 @@ import { Progress } from '@/components/ui/progress'
 const store = useMovieStore()
 
 const handlePageChange = async (page: number) => {
-  debugger
   if (store.activeTab === 'trending') {
     await store.fetchTrending(page + 1)
   } else {
