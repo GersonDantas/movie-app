@@ -29,7 +29,7 @@ const sortOptions = [
 </script>
 
 <template>
-  <div class="flex gap-4 mb-6">
+  <div class="flex gap-4 mb-6 md:flex-row flex-col">
     <Select v-model="filters.sortBy" @update:modelValue="updateFilters">
       <SelectTrigger data-testid="sort-select" class="bg-gray-700 text-white px-4 py-2 rounded-full w-64 focus:outline-none focus:ring-2 focus:ring-tmdb-secondary hover:bg-opacity-90">
         <SelectValue placeholder="Sort by" />
