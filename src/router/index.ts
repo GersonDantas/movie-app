@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import DefaultLayout from '@/layouts/default-layout.vue'
-import { Home, Movie, Search } from '../pages'
+import { Home, Movie, Search, NotFound } from '../pages'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -26,6 +26,11 @@ const router = createRouter({
         },
       ],
     },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'not-found',
+      component: NotFound
+    }
   ],
 })
 
