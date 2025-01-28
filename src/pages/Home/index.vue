@@ -32,7 +32,7 @@ onMounted(async () => {
     <h2 class="text-2xl font-bold mb-4">{{ store.activeTab === 'trending' ? 'Trending' : 'Popular' }}</h2>
 
     <MovieTabs :active-tab="store.activeTab" />
-    <MovieFilters @filter="store.updateFilters" />
+    <MovieFilters v-if="store.activeTab === 'trending'" @filter="store.updateFilters" />
 
     <div v-if="store.loading" class="flex justify-center py-12">
       <Progress :model-value="100" class="w-32" />
