@@ -142,13 +142,14 @@ npm run dev
 
 ```
 src/
+├── assets/         # Assets
 ├── components/     # Reusable components
-├── composables/    # Vue composables
+├── infra/          # Infrastructure configurations
+├── errors/         # Error handling components
 ├── layouts/        # Application layouts
-├── pages/         # Page components
-├── router/        # Route configuration
-├── store/         # Pinia store
-├── services/      # External services
+├── pages/          # Page components
+├── router/         # Route configuration
+├── store/          # Pinia store
 ├── types/         # TypeScript types
 ├── utils/         # Utilities
 └── App.vue        # Root component
@@ -164,10 +165,6 @@ The application is fully responsive, adapting to:
 ## 🌐 Deploy
 
 The application is hosted on [Netlify](https://movie-news.netlify.app/), with automatic CI/CD from the main branch.
-
-## 📄 License
-
-This project is under the MIT license. See the [LICENSE](LICENSE) file for more details.
 
 ## 🤝 Contributing
 
