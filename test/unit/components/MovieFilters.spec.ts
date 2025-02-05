@@ -43,11 +43,9 @@ describe('MovieFilters', () => {
     
     await wrapper.vm.$nextTick()
 
-    // Simula a mudança do valor diretamente no select de gênero
-    const genreSelect = wrapper.findAllComponents({ name: 'Select' })[1] // O segundo Select é o de gênero
+    const genreSelect = wrapper.findAllComponents({ name: 'Select' })[1] 
     await genreSelect.vm.$emit('update:modelValue', '28')
     
-    // Verifica se o evento filter foi emitido
     const emitted = wrapper.emitted('filter')
     expect(emitted).toBeTruthy()
     expect(emitted?.[0][0]).toEqual({

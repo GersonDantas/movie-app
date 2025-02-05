@@ -29,7 +29,6 @@ const makeSut = (options = {}) => {
   setActivePinia(createPinia())
   const store = useMovieStore()
   
-  // Configure o estado inicial da store
   Object.assign(store, {
     searchResults: mockMovies,
     loading: false,
@@ -63,7 +62,7 @@ describe('Search Component', () => {
 
   it('shows loading state', async () => {
     const { wrapper } = makeSut({ loading: true })
-    await wrapper.vm.$nextTick() // Aguarde a atualização do DOM
+    await wrapper.vm.$nextTick()
     
     expect(wrapper.find('[data-test="loading"]').exists()).toBe(true)
   })
